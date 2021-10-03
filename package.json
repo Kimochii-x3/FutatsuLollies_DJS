@@ -1,0 +1,16 @@
+{
+  "name": "FutatsuLollies_master",
+  "version": "1.0.0",
+  "description": "",
+  "main": "flmain.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "FutariLollies#1997",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "ms": "^2.1.2",
+    "promise-mysql": "^4.1.4"
+  }
+}
