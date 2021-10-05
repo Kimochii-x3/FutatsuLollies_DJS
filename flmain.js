@@ -5,12 +5,12 @@ const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
 const bot = new Client({
     messageCacheMaxSize: 300, intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.BANS,
-        Intents.FLAGS.EMOJIS_AND_STICKERS,
-        Intents.FLAGS.GUILD_INVITES,
-        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILDS |
+        Intents.FLAGS.GUILD_MEMBERS |
+        Intents.FLAGS.BANS |
+        Intents.FLAGS.EMOJIS_AND_STICKERS |
+        Intents.FLAGS.GUILD_INVITES |
+        Intents.FLAGS.GUILD_MESSAGES |
         Intents.FLAGS.MESSAGE_REACTIONS] /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
 }) // creating the bot with non-default message settings
 const commands = new Collection(); // creating the command collection
