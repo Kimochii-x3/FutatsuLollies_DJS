@@ -1,10 +1,10 @@
-const Discord = require('discord.js'); // Library used to write the bot code
+const { Client, Intents, MessageEmbed, Collection } = require('discord.js-light'); // Library used to write the bot code
 const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
-const bot = new Discord.Client({ messageCacheMaxSize: 300 /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/}) // creating the bot with non-default message settings
-const commands = new Discord.Collection(); // creating the command collection
+const bot = new Client({ messageCacheMaxSize: 300, intents: [Intents.FLAGS.GUILDS] /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/}) // creating the bot with non-default message settings
+const commands = new Collection(); // creating the command collection
 const cd = new Set(); // creating the set for command cooldowns
 const cmdFiles = fs.readdirSync(__dirname + '/cmd').filter(file => file.endsWith('.js')); // reading the command files in async
 bot.cachingData = {}; // used to cache currently only prefixes for the servers /-/ structurized: { guildID: [prefix] }
@@ -44,11 +44,11 @@ let dbDesc;
 bot.once('ready', async () => {
     // sets the bot owner & some channels
     console.log(process.version);
-    bot.owner = bot.users.cache.get('254349985963835393');
-    bot.rAU = bot.channels.cache.get('622467121175199745');
-    bot.errL = bot.channels.cache.get('780537355144134686');
-    bot.evrL = bot.channels.cache.get('780545286837370901');
-    bot.gJL = bot.channels.cache.get('727205516048203787');
+    bot.owner = await bot.users.fetch('254349985963835393');
+    bot.rAU = await bot.channels.fetch('622467121175199745');
+    bot.errL = await bot.channels.fetch('780537355144134686');
+    bot.evrL = await bot.channels.fetch('780545286837370901');
+    bot.gJL = await bot.channels.fetch('727205516048203787');
     // fetches the MOTD from the database and sets it as the bot's status
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
     if (status && status[0].motd.length > 1) {
@@ -74,7 +74,7 @@ bot.once('ready', async () => {
         // }
     }
     // logging startup/restarts/reconnects and uptime
-    const botStartup = new Discord.MessageEmbed()
+    const botStartup = new MessageEmbed()
     .setTitle(new Date().toLocaleString('en-GB'))
     .setColor('#63ff48')
     .setDescription(dbDesc)

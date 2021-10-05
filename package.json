@@ -9,7 +9,7 @@
   "author": "FutariLollies#1997",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^13.1.0",
+    "discord.js-light": "^4.2.0",
     "ms": "^2.1.2",
     "promise-mysql": "^4.1.4"
   }
