@@ -130,6 +130,7 @@ bot.errHandle = errMain => {
 bot.on('error', bot.errHandle);
 // message related things
 bot.on('message', async message => {
+    console.log(message)
     // checks if the channel the message was sent in is DM one, if it is it closes the DM channel or if its a bot to ignore it
     if (message.channel.type !== 'dm' && !message.author.bot) {
         // checks if the message includes 'prefix' then checks if the bot is mentioned in the message and it returns the prefix for the server the message was sent in
