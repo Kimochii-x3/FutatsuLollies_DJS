@@ -3,7 +3,16 @@ const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
-const bot = new Client({ messageCacheMaxSize: 300, intents: [Intents.FLAGS.GUILDS] /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/}) // creating the bot with non-default message settings
+const bot = new Client({
+    messageCacheMaxSize: 300, intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.BANS,
+        Intents.FLAGS.EMOJIS_AND_STICKERS,
+        Intents.FLAGS.GUILD_INVITES,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.MESSAGE_REACTIONS] /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
+}) // creating the bot with non-default message settings
 const commands = new Collection(); // creating the command collection
 const cd = new Set(); // creating the set for command cooldowns
 const cmdFiles = fs.readdirSync(__dirname + '/cmd').filter(file => file.endsWith('.js')); // reading the command files in async
@@ -51,18 +60,23 @@ bot.once('ready', async () => {
     bot.gJL = await bot.channels.fetch('727205516048203787');
     // fetches the MOTD from the database and sets it as the bot's status
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
-    if (status && status[0].motd.length > 1) {
-        bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING'}).catch(bot.errHandle);
-    } else {
-        bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' }).catch(bot.errHandle);
+    try {
+        if (status && status[0].motd.length > 1) {
+            bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING' });
+        } else {
+            bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' });
+        }
+    } catch (err) {
+        bot.errHandle(err);
     }
     // maps the guilds by their ID, then checks if they exist in the database, adds them if they dont
     const gIDs = bot.guilds.cache.map(g => g.id);
     for (const g of gIDs) {
         const gInDB = await bot.db.query('select * from serverInfo where serverID = ?', [g]).catch(bot.errHandle);
         if (!gInDB[0]) {
-            await bot.db.query('insert into serverInfo (serverID) values (?)', [g]).then(()=> {
-            bot.evrL.send(`Added ${g} to database as it was missing`); }).catch(bot.errHandle);
+            await bot.db.query('insert into serverInfo (serverID) values (?)', [g]).then(() => {
+                bot.evrL.send(`Added ${g} to database as it was missing`);
+            }).catch(bot.errHandle);
         }
         // if (gInDB[0] && gInDB[0].serverID.length < 1) {
         //     await bot.db.query('insert into serverInfo (serverID) values (?)', [g]).then(()=> {
@@ -75,9 +89,9 @@ bot.once('ready', async () => {
     }
     // logging startup/restarts/reconnects and uptime
     const botStartup = new MessageEmbed()
-    .setTitle(new Date().toLocaleString('en-GB'))
-    .setColor('#63ff48')
-    .setDescription(dbDesc)
+        .setTitle(new Date().toLocaleString('en-GB'))
+        .setColor('#63ff48')
+        .setDescription(dbDesc)
     bot.rAU.send(botStartup).catch(bot.errHandle);
     // saving prefixes to the cache rather than constantly fetching them
     // const guildCaching = bot.guilds.cache.map(g => g.id);
@@ -91,12 +105,12 @@ bot.once('ready', async () => {
     for (i = 0; i < dbData.length; i++) {
         // console.log(dbData[i].serverID);
         bot.cachingData[dbData[i].serverID] = [dbData[i].prefix, dbData[i].serverLog];
-        if (bot.cachingData[dbData[i].serverID] == 683496948883390475) {
+        if (bot.cachingData[dbData[i].serverID] == 683496948883390475n) {
             console.log(bot.cachingData[dbData[i].serverID]);
         }
     };
     // interval to check if a user hasnt been unmuted when they should be unmuted due to the bot restarting, reconnecting or whatever other issue
-    setInterval(async() => {
+    setInterval(async () => {
         const rows = await bot.db.query('select * from serverMutes where timeUnmute < ?', [Date.now()]).catch(bot.errHandle);
         if (rows) { //node v14 optional chaining rows?[0]?.timeUnmute - keep it in mind
             for (const r of rows) {
@@ -135,13 +149,13 @@ bot.on('message', async message => {
                         message.channel.send(`my prefix for this server is: \`${rows[0].prefix}\``);
                     }
                 } else {
-                   message.channel.send(`my prefix for this server is: \`${bot.cachingData[message.guild.id][0]}\``);
+                    message.channel.send(`my prefix for this server is: \`${bot.cachingData[message.guild.id][0]}\``);
                 }
             }
         } else {
             // gets the prefix from database for the server, gets the args and options after which checks if the message starts with command name (and if args are required or not) then executes it
             // on error logs the error in errorlog channel and replies if error occured
-            if (!bot.cachingData[message.guild.id]) { return console.log(bot.cachingData[message.guild.id] + ' problem here ' + message.guild.id +' '+ message.guild.name); }
+            if (!bot.cachingData[message.guild.id]) { return console.log(bot.cachingData[message.guild.id] + ' problem here ' + message.guild.id + ' ' + message.guild.name); }
             if (!bot.cachingData[message.guild.id][0]) {
                 const rows = await bot.db.query('select * from serverInfo where serverID = ?', [message.guild.id]).catch(bot.errHandle);
                 if (rows) {
@@ -150,7 +164,7 @@ bot.on('message', async message => {
                     await message.channel.send('Issue occured whilst working with database, this has been logged, please wait a bit before repeating the command/message').catch(bot.errHandle);
                     return await bot.evrL.send(`Issue occured whilst acquiring \`rows\` from the database\nServer ID: ${message.guild.id}\nOwner ID: ${message.guild.owner.id}\nChannel ID: ${message.channel.id}\nChannel Type: ${message.channel.type}\nAuthor ID: ${message.author.id}\nAuthor Tag: ${message.author.tag}`).catch(bot.errHandle);
                 }
-            }   
+            }
             const prefix = bot.cachingData[message.guild.id][0];
             if (!message.content.toLowerCase().startsWith(prefix)) { return; }
             const args = message.content.slice(prefix.length).split(/ +/);
@@ -167,8 +181,7 @@ bot.on('message', async message => {
                     await message.channel.send('No args provided');
                 } else {
                     cmd.execute(bot, message, args, option, commands, prefix);
-                    if (!message.member.hasPermission('ADMINISTRATOR') && cmd.cd)
-                    {
+                    if (!message.member.hasPermission('ADMINISTRATOR') && cmd.cd) {
                         if (cmd.cd !== 0) {
                             cd.add(`${message.author.id} + ${message.guild.id}`);
                             setTimeout(() => {
@@ -195,12 +208,14 @@ bot.on('guildCreate', async guild => {
     const rows = await bot.db.query('select * from serverInfo where serverID = ?', [guild.id]).catch(bot.errHandle);
     if (rows && rows[0]) {
         if (rows[0].serverID == guild.id) { return; } else {
-            await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(()=> {
-            bot.evrL.send(`Added ${guild.id} to database, serverID != to guild.id, this is a extremely rare occasion, if it happens constantly check the code`).catch(bot.errHandle); }).catch(bot.errHandle);
+            await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(() => {
+                bot.evrL.send(`Added ${guild.id} to database, serverID != to guild.id, this is a extremely rare occasion, if it happens constantly check the code`).catch(bot.errHandle);
+            }).catch(bot.errHandle);
         }
     } else {
-        await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(()=> {
-        bot.evrL.send(`Added ${guild.id} to database`).catch(bot.errHandle); }).catch(bot.errHandle);
+        await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(() => {
+            bot.evrL.send(`Added ${guild.id} to database`).catch(bot.errHandle);
+        }).catch(bot.errHandle);
     }
 });
 // the bot token that it logs in with
