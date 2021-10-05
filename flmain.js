@@ -60,7 +60,8 @@ bot.once('ready', async () => {
             bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' });
         }
     } catch (err) {
-        bot.errHandle(err);
+        console.error(err)
+        // bot.errHandle(err);
     }
     // maps the guilds by their ID, then checks if they exist in the database, adds them if they dont
     const gIDs = bot.guilds.cache.map(g => g.id);
