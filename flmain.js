@@ -52,9 +52,9 @@ bot.once('ready', async () => {
     // fetches the MOTD from the database and sets it as the bot's status
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
     if (status && status[0].motd.length > 1) {
-        await bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING'}).catch(bot.errHandle);
+        bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING'}).catch(bot.errHandle);
     } else {
-        await bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' }).catch(bot.errHandle);
+        bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' }).catch(bot.errHandle);
     }
     // maps the guilds by their ID, then checks if they exist in the database, adds them if they dont
     const gIDs = bot.guilds.cache.map(g => g.id);
