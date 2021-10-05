@@ -125,6 +125,7 @@ bot.once('ready', async () => {
 });
 // error logging
 bot.errHandle = errMain => {
+    console.log(errMain)
     bot.errL.send(errMain.toString()).catch(errCatched => console.error(`${Date.toLocaleString('en-GB')}\nOriginal error:\n${errMain}\nFailed to send err msg due to ${errCatched}`));
 }
 // logs erros, used for debugging
