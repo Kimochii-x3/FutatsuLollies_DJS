@@ -61,8 +61,8 @@ bot.once('ready', async () => {
             bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' });
         }
     } catch (err) {
-        console.error(err)
-        // bot.errHandle(err);
+        //console.error(err)
+        bot.errHandle(err);
     }
     // maps the guilds by their ID, then checks if they exist in the database, adds them if they dont
     const gIDs = bot.guilds.cache.map(g => g.id);
@@ -132,8 +132,7 @@ bot.errHandle = errMain => {
 // logs erros, used for debugging
 bot.on('error', bot.errHandle);
 // message related things
-bot.on('message', async message => {
-    console.log(message)
+bot.on('messageCreate', async message => {
     // checks if the channel the message was sent in is DM one, if it is it closes the DM channel or if its a bot to ignore it
     if (message.channel.type !== 'dm' && !message.author.bot) {
         // checks if the message includes 'prefix' then checks if the bot is mentioned in the message and it returns the prefix for the server the message was sent in
