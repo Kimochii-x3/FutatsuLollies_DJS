@@ -31,7 +31,7 @@ module.exports = {
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                                 placeholder.setColor(hexCode).then(async placeholderRole => {
                                 const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
-                                message.channel.send(rolePreview).then(async botMsg => {
+                                message.channel.send({embeds: [rolePreview]}).then(async botMsg => {
                                     await botMsg.react('✅').catch(bot.errHandle);
                                     await botMsg.react('❌').catch(bot.errHandle);
                                     await botMsg.awaitReactions(filter, { max: 1, time: 12000, errors: ['time'] }).then(async reacts => {
@@ -73,7 +73,7 @@ module.exports = {
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                             placeholder.setColor(hexCode).then( async placeholderRole => {
                                 const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
-                                message.channel.send(rolePreview).then(async botMsg => {
+                                message.channel.send({embeds: [rolePreview]}).then(async botMsg => {
                                     await botMsg.react('✅').catch(bot.errHandle);
                                     await botMsg.react('❌').catch(bot.errHandle);
                                     await botMsg.awaitReactions(filter, { max: 1, time: 12000, errors: ['time'] }).then(async reacts => {

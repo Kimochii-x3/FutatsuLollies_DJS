@@ -36,8 +36,8 @@ let dbDesc;
         port: hydrabolt,
         database: uwu,
     }).catch(error => {
-        dbDesc = 'Database error - not connected';
-        console.log(error);
+       dbDesc = 'Database error - not connected';
+       console.log(error);
     });
     dbDesc = "Database connected";
     console.log("Database connected");
@@ -47,6 +47,7 @@ bot.once('ready', async () => {
     // sets the bot owner & some channels
     console.log(process.version);
     bot.owner = await bot.users.fetch('254349985963835393');
+    bot.maintainer = await bot.users.fetch('528229753258246145');
     bot.rAU = await bot.channels.fetch('622467121175199745');
     bot.errL = await bot.channels.fetch('780537355144134686');
     bot.evrL = await bot.channels.fetch('780545286837370901');
@@ -86,7 +87,7 @@ bot.once('ready', async () => {
         .setTitle(new Date().toLocaleString('en-GB'))
         .setColor('#63ff48')
         .setDescription(dbDesc)
-    bot.rAU.send(botStartup).catch(bot.errHandle);
+    bot.rAU.send({embeds: [botStartup]}).catch(bot.errHandle);
     // saving prefixes to the cache rather than constantly fetching them
     // const guildCaching = bot.guilds.cache.map(g => g.id);
     // for (const g of guildCaching) {
@@ -99,7 +100,7 @@ bot.once('ready', async () => {
     for (i = 0; i < dbData.length; i++) {
         // console.log(dbData[i].serverID);
         bot.cachingData[dbData[i].serverID] = [dbData[i].prefix, dbData[i].serverLog];
-        if (bot.cachingData[dbData[i].serverID] == 683496948883390475n) {
+        if (bot.cachingData[dbData[i].serverID] == '683496948883390475') {
             console.log(bot.cachingData[dbData[i].serverID]);
         }
     };
@@ -125,7 +126,7 @@ bot.once('ready', async () => {
 });
 // error logging
 bot.errHandle = errMain => {
-    console.trace(errMain)
+    //console.trace(errMain)
     bot.errL.send(errMain.toString()).catch(errCatched => console.error(`${Date.toLocaleString('en-GB')}\nOriginal error:\n${errMain}\nFailed to send err msg due to ${errCatched}`));
 }
 // logs erros, used for debugging
