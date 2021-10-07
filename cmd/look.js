@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 // lookup command it takes arguments of avatar and tag and its used to lookup someone's avatar or user tag
 module.exports = { 
     name: 'look',

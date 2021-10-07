@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 // channel command used to set the logging channel for a server
 module.exports = {
     name: 'channel',
@@ -10,7 +10,7 @@ module.exports = {
     async execute (bot, message, args, option, commands, prefix) {
         if (args[0]) {
             // if the option after the dash (-) is set, it'll set the logging channel
-            if (message.member.hasPermission('ADMINISTRATOR') || message.author.id === bot.owner.id) {
+            if (message.member.permissions.has('ADMINISTRATOR') || message.author.id === bot.owner.id) {
                 if (option[1] === 'set') {
                     const cID = message.mentions.channels.first();
                     if (cID) {

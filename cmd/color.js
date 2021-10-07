@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {MessageEmbed} = require('discord.js-light');
 // color command used to create a custom role color based on hex bot's color command, however it doesn't use external functions like hex bot does
 module.exports = {
     name: 'color',
@@ -9,7 +9,7 @@ module.exports = {
     args: false,
     async execute (bot, message, args, option, commands, prefix) {
         // checks for perms before carrying on with command execution
-        const botPerms = message.guild.me.hasPermission(['SEND_MESSAGES, MANAGE_ROLES, EMBED_LINKS, ADD_REACTIONS'], { checkAdmin: true, checkOwner: false });
+        const botPerms = message.guild.me.permissions.has(['SEND_MESSAGES, MANAGE_ROLES, EMBED_LINKS, ADD_REACTIONS'], { checkAdmin: true });
         if (!botPerms) {
             return message.channel.send('I do not have one or more of these permissions: `Send Messages; Manage Roles; Embed Links; Add Reactions;` to my role `FutatsuLollies`').catch(bot.errHandle);
         } else {

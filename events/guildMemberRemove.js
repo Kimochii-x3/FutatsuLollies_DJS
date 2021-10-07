@@ -1,9 +1,9 @@
-const Discord = require('discord.js');
+const {MessageEmbed} = require('discord.js-light');
 
 module.exports = async (bot, member) => {
     const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [member.guild.id]).catch(bot.errHandle);
     if (rows != undefined) {
-        const botPerms = member.guild.me.hasPermission(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true, checkOwner: false });
+        const botPerms = member.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true });
         const logCHNL = member.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
@@ -14,7 +14,7 @@ module.exports = async (bot, member) => {
                     const aLogTimestamp = aLogFound.createdTimestamp;
                     const userRole = member.guild.roles.cache.find(role => role.name === `USER-${member.id}`);
         
-                    const embedLeave = new Discord.MessageEmbed()
+                    const embedLeave = new MessageEmbed()
                     .setAuthor('User leave')
                     .setDescription(`Username: **${member.user.tag}**`)
                     .setColor('#c4150f')
@@ -26,7 +26,7 @@ module.exports = async (bot, member) => {
                             return logCHNL.send(embedLeave).catch(bot.errHandle);
                         } else {
                             const executor = aLogFound.executor.user.id;
-                            const embedKick = new Discord.MessageEmbed()
+                            const embedKick = new MessageEmbed()
                             .setAuthor('User kicked')
                             .setDescription(`Moderator: <@${executor}>\n Member: **${member.user.tag}**`)
                             .setColor('#c4150f')
@@ -39,7 +39,7 @@ module.exports = async (bot, member) => {
                         return logCHNL.send(embedLeave).catch(bot.errHandle);
                     }
                 } else {
-                    const embedLeave = new Discord.MessageEmbed()
+                    const embedLeave = new MessageEmbed()
                     .setAuthor('User leave')
                     .setDescription(`Username: **${member.user.tag}**`)
                     .setColor('#c4150f')

@@ -1,14 +1,14 @@
-const Discord = require('discord.js');
+const {MessageEmbed} = require('discord.js-light');
 
 module.exports = async (bot, oldMember, newMember) => {
     const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [newMember.guild.id]).catch(bot.errHandle);
     if (rows != undefined) {
-        const botPerms = oldMember.guild.me.hasPermission(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true, checkOwner: false });
+        const botPerms = oldMember.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true });
         const logCHNL = oldMember.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
                 // if (oldMember.user.username !== newMember.user.username) {
-                //     const u$Change = new Discord.MessageEmbed()
+                //     const u$Change = new MessageEmbed()
                 //     .setAuthor('User changed username')
                 //     .addField('**Old username: **', oldMember.user.username)
                 //     .addField('**New username: **', newMember.user.username)
@@ -23,7 +23,7 @@ module.exports = async (bot, oldMember, newMember) => {
                             if (log.executor) {
                                 const role = oldMember.guild.roles.cache.find(r => r.id === log.changes[0].new[0].id);
                                 const change = log.changes[0].key === '$add' ? true : false;
-                                const r$Change = new Discord.MessageEmbed()
+                                const r$Change = new MessageEmbed()
                                 .setAuthor(change ? 'Role added to member' : 'Role removed from member')
                                 .addField('**Executor:**', log.executor || 'Executor not found')
                                 .addField('**Target:**', log.target)
@@ -54,7 +54,7 @@ module.exports = async (bot, oldMember, newMember) => {
                                     return embed(changeDefine, changeLog);
                                 }
                                 function embed(changeDefine, changeLog) {
-                                    const nick = new Discord.MessageEmbed()
+                                    const nick = new MessageEmbed()
                                     .setAuthor(changeDefine)
                                     .setDescription(changeLog)
                                     .setColor('GREY')

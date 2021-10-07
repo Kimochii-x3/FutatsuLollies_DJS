@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js-light');
 // log command used for pretty much enabling/disabling the logging for a server
 module.exports = {
     name: 'log',
@@ -8,7 +8,7 @@ module.exports = {
     guildOnly: true,
     args: true,
     async execute (bot, message, args, option, commands, prefix) {
-        if (message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true }) || message.author.id === bot.owner.id) {
+        if (message.member.permissions.has('ADMINISTRATOR', { checkAdmin: true }) || message.author.id === bot.owner.id) {
             const rows = await bot.db.query('select * from serverInfo where serverID = ?', [message.guild.id]).catch(bot.errHandle);
             if (option[1] === 'set') {
                 if (rows[0].serverClogID.length > 1) {

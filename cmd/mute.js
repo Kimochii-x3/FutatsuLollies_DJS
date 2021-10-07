@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {MessageEmbed} = require('discord.js-light');
 const ms = require('ms');
 // mute command, lotsa code stuff, sorting permissions for channels, saving mute role to database and uhh idk what else more info in later on commenting
 
@@ -23,7 +23,7 @@ module.exports = {
     guildOnly: true,
     args: true,
     async execute (bot, message, args, option, commands, prefix) {
-        const botPerms = message.guild.me.hasPermission(['MANAGE_CHANNELS', 'ADD_REACTIONS', 'MUTE_MEMBERS', 'MANAGE_ROLES', 'SEND_MESSAGES', 'EMBED_LINKS'], { checkAdmin: true, checkOwner: false });
+        const botPerms = message.guild.me.permissions.has(['MANAGE_CHANNELS', 'ADD_REACTIONS', 'MUTE_MEMBERS', 'MANAGE_ROLES', 'SEND_MESSAGES', 'EMBED_LINKS'], { checkAdmin: true });
         // console.log(option[0]);
         // console.log(option[1]);
         if (option[1]) {
@@ -32,7 +32,7 @@ module.exports = {
                 if (foundMuterole) {
                     await bot.db.query('update serverInfo set muteRoleID = ? where serverID = ?', [foundMuterole.id, message.guild.id]).catch(bot.errHandle);
                     return message.channel.send(`Successfully changed the mute role's ID to ${foundMuterole} in the database`).catch(bot.errHandle);
-                    // let checkedChannelsEmbed = new Discord.MessageEmbed()
+                    // let checkedChannelsEmbed = new MessageEmbed()
                     // .setAuthor(`Checking all ${message.guild.channels.cache.size} channels for permissions`)
                     // get array of channels, chunk it down, limit chunks to 10, output chunks to fields for discord embed, not necessary to do it now, can be for future update, after that is done
                     // let it work on permissions for muterole, till then ppl do the perms themselves.
@@ -77,7 +77,7 @@ module.exports = {
                     return muteMember();
                 }
                 async function muteMember() {
-                    if (message.member.hasPermission('MANAGE_ROLES', { checkAdmin: true, checkOwner: true } )) {
+                    if (message.member.permissions.has('MANAGE_ROLES', { checkAdmin: true } )) {
                         if (arrMentionMembers.length !== 0) {
                             arrMentionMembers.each(async mbrMen => {
                                 // console.log(mbrMen.roles);
@@ -130,7 +130,7 @@ module.exports = {
                         } else {
                             return message.channel.send('You have not mentioned any member(s)').catch(bot.errHandle);
                         }
-                    } else if (!message.member.hasPermission('MANAGE_ROLES', { checkAdmin: true, checkOwner: true } )) {
+                    } else if (!message.member.permissions.has('MANAGE_ROLES', { checkAdmin: true } )) {
                         return message.react('🤔').catch(bot.errHandle);
                     }
                 };
