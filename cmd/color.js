@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 // color command used to create a custom role color based on hex bot's color command, however it doesn't use external functions like hex bot does
 module.exports = {
     name: 'color',
@@ -19,7 +19,7 @@ module.exports = {
                 const idOthers = message.mentions.members.first();
                 const roleColor = message.guild.roles.cache.find(r => r.name === `USER-${message.author.id}`);
                 const placeholder = message.guild.roles.cache.find(r => r.name === '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇');
-                const rolePreview = new Discord.MessageEmbed()
+                const rolePreview = new MessageEmbed()
                 .setDescription(`**Your role will look like this: \n${placeholder}\n${placeholder}\n${placeholder}\nDo you want to change your color?**`)
                 .setColor(message.member.displayHexColor);
                 if (!idOthers) {
@@ -38,26 +38,26 @@ module.exports = {
                                         const reaction = reacts.first();
                                         if (reaction.emoji.name === '✅') {
                                             const latestEmbed = botMsg.embeds[0];
-                                            const acceptEmbed = new Discord.MessageEmbed(latestEmbed)
+                                            const acceptEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Role set**')
                                             .setColor(message.member.displayHexColor);
                                             message.guild.roles.create({ data: { name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1 } }).then(async userRole => {
                                                 message.member.roles.add(userRole, 'Adding the custom color role to the requester');
-                                                botMsg.edit(acceptEmbed).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
+                                                botMsg.edit({embeds: [acceptEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                             });
                                         } else if (reaction.emoji.name === '❌') {
                                             const latestEmbed = botMsg.embeds[0];
-                                            const cancelEmbed = new Discord.MessageEmbed(latestEmbed)
+                                            const cancelEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Cancelled**')
                                             .setColor(message.member.displayHexColor);
-                                            botMsg.edit(cancelEmbed).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
+                                            botMsg.edit({embeds: [cancelEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                         }
                                     }).catch(() => {
                                         const latestEmbed = botMsg.embeds[0];
-                                        const noResponseEmbed = new Discord.MessageEmbed(latestEmbed)
+                                        const noResponseEmbed = new MessageEmbed(latestEmbed)
                                         .setDescription('**Times Up**')
                                         .setColor(botMsg.member.displayHexColor);
-                                        botMsg.edit(noResponseEmbed).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
+                                        botMsg.edit({embeds: [noResponseEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                     });
                                 }).catch(bot.errHandle);
                             }).catch(bot.errHandle);
@@ -80,24 +80,24 @@ module.exports = {
                                         const reaction = reacts.first();
                                         if (reaction.emoji.name === '✅') {
                                             const latestEmbed = botMsg.embeds[0];
-                                            const acceptEmbed = new Discord.MessageEmbed(latestEmbed)
+                                            const acceptEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Role Updated**')
                                             .setColor(message.member.displayHexColor);
                                             roleColor.setColor(hexCode).catch(bot.errHandle);
-                                            botMsg.edit(acceptEmbed).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
+                                            botMsg.edit({embeds: [acceptEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                         } else if (reaction.emoji.name === '❌') {
                                             const latestEmbed = botMsg.embeds[0];
-                                            const cancelEmbed = new Discord.MessageEmbed(latestEmbed)
+                                            const cancelEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Cancelled**')
                                             .setColor(message.member.displayHexColor);
-                                            botMsg.edit(cancelEmbed).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
+                                            botMsg.edit({embeds: [cancelEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                         }
                                     }).catch(() => {
                                         const latestEmbed = botMsg.embeds[0];
-                                        const noResponseEmbed = new Discord.MessageEmbed(latestEmbed)
+                                        const noResponseEmbed = new MessageEmbed(latestEmbed)
                                         .setDescription('**Times Up**')
                                         .setColor(botMsg.member.displayHexColor);
-                                        botMsg.edit(noResponseEmbed).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
+                                        botMsg.edit({embeds: [noResponseEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                     });
                                 }).catch(bot.errHandle);
                             }).catch(bot.errHandle);
