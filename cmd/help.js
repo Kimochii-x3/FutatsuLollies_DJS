@@ -17,13 +17,13 @@ module.exports = {
             const cmdsEmbed = new MessageEmbed()
             .setColor('GREY')
             .setAuthor('Commands & Usages:')
-            .setDescription(dataName);
+            .setDescription(dataName.toString());
             return message.channel.send({embeds: [cmdsEmbed]}).catch(bot.errHandle);
         } else if (args[0] === 'desc') {
             const descEmbed = new MessageEmbed()
             .setColor('GREY')
             .setAuthor('Descriptions:')
-            .setDescription(dataDesc);
+            .setDescription(dataDesc.toString());
             return message.channel.send({embeds: [descEmbed]}).catch(bot.errHandle);
         } else if (args[0] === 'info') {
             const rows = await bot.db.query(`select * from botStats`).catch(err => errorLogs.send(err));
