@@ -1,11 +1,11 @@
-const { Client, Intents, MessageEmbed, Collection } = require('discord.js-light'); // Library used to write the bot code
+const { Client, Intents, MessageEmbed, Collection, Options } = require('discord.js-light'); // Library used to write the bot code
 const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
 const bot = new Client({
     // default caching options, feel free to copy and modify. more info on caching options below.
-    makeCache: Discord.Options.cacheWithLimits({
+    makeCache: Options.cacheWithLimits({
         ApplicationCommandManager: 0, // guild.commands
         BaseGuildEmojiManager: Infinity, // guild.emojis
         ChannelManager: Infinity, // client.channels
