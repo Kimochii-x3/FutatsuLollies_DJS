@@ -4,7 +4,32 @@ const fs = require('fs'); // used to read the command & event files as well as a
 const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
 const bot = new Client({
-    messageCacheMaxSize: 300, intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"] /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
+    // default caching options, feel free to copy and modify. more info on caching options below.
+    makeCache: Discord.Options.cacheWithLimits({
+        ApplicationCommandManager: 0, // guild.commands
+        BaseGuildEmojiManager: Infinity, // guild.emojis
+        ChannelManager: Infinity, // client.channels
+        GuildChannelManager: 0, // guild.channels
+        GuildBanManager: 0, // guild.bans
+        GuildInviteManager: 0, // guild.invites
+        GuildManager: Infinity, // client.guilds
+        GuildMemberManager: 0, // guild.members
+        GuildStickerManager: 0, // guild.stickers
+        MessageManager: 300, // channel.messages
+        PermissionOverwriteManager: Infinity, // channel.permissionOverwrites
+        PresenceManager: 0, // guild.presences
+        ReactionManager: Infinity, // message.reactions
+        ReactionUserManager: Infinity, // reaction.users
+        RoleManager: Infinity, // guild.roles
+        StageInstanceManager: 0, // guild.stageInstances
+        ThreadManager: 0, // channel.threads
+        ThreadMemberManager: 0, // threadchannel.members
+        UserManager: 0, // client.users
+        VoiceStateManager: 0 // guild.voiceStates
+    }),
+    //messageCacheMaxSize: 300, 
+    intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"] 
+    /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
 }) // creating the bot with non-default message settings
 const commands = new Collection(); // creating the command collection
 const cd = new Set(); // creating the set for command cooldowns
