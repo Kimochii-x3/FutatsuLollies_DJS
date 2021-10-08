@@ -202,7 +202,7 @@ bot.on('messageCreate', async message => {
                     await message.channel.send('No args provided');
                 } else {
                     cmd.execute(bot, message, args, option, commands, prefix);
-                    if (!message.member.hasPermission('ADMINISTRATOR') && cmd.cd) {
+                    if (!message.member.permissions.has('ADMINISTRATOR') && cmd.cd) {
                         if (cmd.cd !== 0) {
                             cd.add(`${message.author.id} + ${message.guild.id}`);
                             setTimeout(() => {
