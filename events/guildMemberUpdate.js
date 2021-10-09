@@ -31,7 +31,7 @@ module.exports = async (bot, oldMember, newMember) => {
                                 // .setDescription(`Member: ${log.target}\nRole: ${role}`)
                                 .setColor(change ? '#14cdfc' : '#fc2b14')
                                 .setTimestamp();
-                                return logCHNL.send(r$Change).catch(bot.errHandle);
+                                return logCHNL.send({embeds: [r$Change]}).catch(bot.errHandle);
                             }
                         } else if (log?.action === 'MEMBER_UPDATE') {
                             if (log.changes[0].key === 'nick') {
@@ -59,7 +59,7 @@ module.exports = async (bot, oldMember, newMember) => {
                                     .setDescription(changeLog)
                                     .setColor('GREY')
                                     .setTimestamp();
-                                    return logCHNL.send(nick).catch(bot.errHandle); 
+                                    return logCHNL.send({embeds: [nick]}).catch(bot.errHandle); 
                                 }
                             } else if (log.changes[0].key === 'mute') {
                                 return;

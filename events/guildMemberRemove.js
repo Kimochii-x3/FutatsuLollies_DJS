@@ -23,7 +23,7 @@ module.exports = async (bot, member) => {
                     if (tempTimestamp <= aLogTimestamp + 10000) {
                         if (uTarget.id !== member.id) {
                             if (userRole) { userRole.delete(`Member ${member.user.tag} left the server'`).catch(bot.errHandle); }
-                            return logCHNL.send(embedLeave).catch(bot.errHandle);
+                            return logCHNL.send({embeds: [embedLeave]}).catch(bot.errHandle);
                         } else {
                             const executor = aLogFound.executor.user.id;
                             const embedKick = new MessageEmbed()
@@ -32,11 +32,11 @@ module.exports = async (bot, member) => {
                             .setColor('#c4150f')
                             .setTimestamp();
                             if (userRole) { userRole.delete(`Member ${member.user.tag} was kicked from the server`).catch(bot.errHandle); }
-                            return logCHNL.send(embedKick).catch(bot.errHandle);
+                            return logCHNL.send({embeds: [embedKick]}).catch(bot.errHandle);
                         }
                     } else {
                         if (userRole) { userRole.delete(`Member ${member.user.tag} left the server`).catch(bot.errHandle); }
-                        return logCHNL.send(embedLeave).catch(bot.errHandle);
+                        return logCHNL.send({embeds: [embedLeave]}).catch(bot.errHandle);
                     }
                 } else {
                     const embedLeave = new MessageEmbed()
@@ -44,7 +44,7 @@ module.exports = async (bot, member) => {
                     .setDescription(`Username: **${member.user.tag}**`)
                     .setColor('#c4150f')
                     .setTimestamp();
-                    return logCHNL.send(embedLeave);
+                    return logCHNL.send({embeds: [embedLeave]});
                     }
             }
         }

@@ -14,14 +14,14 @@ module.exports = async (bot, emoji) => {
                     .setDescription(`By: Unknown\nName: ${emoji.name}\nID: ${emoji.id}`)
                     .setColor('#42f456')
                     .setTimestamp();
-                    return logCHNL.send(embed).catch(bot.errHandle);
+                    return logCHNL.send({embeds: [embed]}).catch(bot.errHandle);
                 } else {
                     const embed = new MessageEmbed()
                     .setAuthor('Emoji created')
                     .setDescription(`By: ${executor}\nName: ${emoji.name}\nID: ${emoji.id}`)
                     .setColor('#42f456')
                     .setTimestamp();
-                    return logCHNL.send(embed).catch(bot.errHandle);
+                    return logCHNL.send({embeds: [embed]}).catch(bot.errHandle);
                 }
             }
         }

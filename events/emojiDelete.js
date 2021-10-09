@@ -14,14 +14,14 @@ module.exports = async (bot, emoji) => {
                     .setDescription(`By: Unknown\nName: ${emoji.name}\nID: ${emoji.id}`)
                     .setColor('#ff3a28')
                     .setTimestamp();
-                    return logCHNL.send(embed).catch(bot.errHandle);
+                    return logCHNL.send({embeds: [embed]}).catch(bot.errHandle);
                 } else {
                     const embed = new MessageEmbed()
                     .setAuthor('Emoji deleted')
                     .setDescription(`By: ${executor}\nName: ${emoji.name}\nID: ${emoji.id}`)
                     .setColor('#ff3a28')
                     .setTimestamp();
-                    return logCHNL.send(embed).catch(bot.errHandle);
+                    return logCHNL.send({embeds: [embed]}).catch(bot.errHandle);
                 }
             } 
         }

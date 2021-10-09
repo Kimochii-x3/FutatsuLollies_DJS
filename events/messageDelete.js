@@ -16,7 +16,7 @@ module.exports = async (bot, message) => {
 						.setColor('#c4150f')
 						.setTimestamp()
 						.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
-						return logCHNL.send(mDelete);
+						return logCHNL.send({embeds: [mDelete]});
 					} else {
 						mFiles.forEach(async (a) => {
 							if (['.png', '.jpg', '.gif', '.jpeg', '.tiff', '.tif', '.bmp'].some(e => a.includes(e))) {
@@ -28,7 +28,7 @@ module.exports = async (bot, message) => {
 								.setImage(a)
 								.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 				
-								{ setTimeout(() => { logCHNL.send(mDelete); }, 1250); }
+								{ setTimeout(() => { logCHNL.send({embeds: [mDelete]}); }, 1250); }
 								return;
 							} else {
 								const mDelete = new MessageEmbed()
@@ -37,7 +37,7 @@ module.exports = async (bot, message) => {
 								.setColor('#c4150f')
 								.setTimestamp()
 								.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
-								return logCHNL.send(mDelete); 
+								return logCHNL.send({embeds: [mDelete]}); 
 							}
 						});
 					}
