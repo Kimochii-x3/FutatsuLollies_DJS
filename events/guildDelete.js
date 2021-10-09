@@ -1,4 +1,4 @@
-const Discord = require('discord.js-light');
+const Discord = require('discord.js');
 
 module.exports = async (bot, guild) => {
     // const chnl = bot.channels.cache.get('727205516048203787');

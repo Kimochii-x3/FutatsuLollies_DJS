@@ -1,4 +1,4 @@
-const Discord = require('discord.js-light');
+const Discord = require('discord.js');
 
 module.exports = async (bot, guild, user) => {
     const rows = await bot.db.query('select * from serverInfo where serverID = ?', [guild.id]).catch(bot.errHandle);

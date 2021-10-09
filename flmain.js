@@ -1,33 +1,10 @@
-const { Client, Intents, MessageEmbed, Collection, Options } = require('discord.js-light'); // Library used to write the bot code
+const { Client, Intents, MessageEmbed, Collection, Options } = require('discord.js'); // Library used to write the bot code
 const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
 const bot = new Client({
-    // default caching options, feel free to copy and modify. more info on caching options below.
-    makeCache: Options.cacheWithLimits({
-        ApplicationCommandManager: 0, // guild.commands
-        BaseGuildEmojiManager: Infinity, // guild.emojis
-        ChannelManager: Infinity, // client.channels
-        GuildChannelManager: 0, // guild.channels
-        GuildBanManager: 0, // guild.bans
-        GuildInviteManager: 0, // guild.invites
-        GuildManager: Infinity, // client.guilds
-        GuildMemberManager: 0, // guild.members
-        GuildStickerManager: 0, // guild.stickers
-        MessageManager: 300, // channel.messages
-        PermissionOverwriteManager: Infinity, // channel.permissionOverwrites
-        PresenceManager: 0, // guild.presences
-        ReactionManager: Infinity, // message.reactions
-        ReactionUserManager: Infinity, // reaction.users
-        RoleManager: Infinity, // guild.roles
-        StageInstanceManager: 0, // guild.stageInstances
-        ThreadManager: 0, // channel.threads
-        ThreadMemberManager: 0, // threadchannel.members
-        UserManager: 0, // client.users
-        VoiceStateManager: 0 // guild.voiceStates
-    }),
-    //messageCacheMaxSize: 300, 
+    messageCacheMaxSize: 300,
     intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"] 
     /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
 }) // creating the bot with non-default message settings

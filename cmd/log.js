@@ -1,4 +1,4 @@
-const Discord = require('discord.js-light');
+const Discord = require('discord.js');
 // log command used for pretty much enabling/disabling the logging for a server
 module.exports = {
     name: 'log',

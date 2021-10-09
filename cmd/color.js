@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js-light');
+const {MessageEmbed} = require('discord.js');
 // color command used to create a custom role color based on hex bot's color command, however it doesn't use external functions like hex bot does
 module.exports = {
     name: 'color',

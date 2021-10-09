@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js-light');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = async (bot, member) => {
     const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [member.guild.id]).catch(bot.errHandle);

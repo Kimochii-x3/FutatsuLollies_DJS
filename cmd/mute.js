@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js-light');
+const {MessageEmbed} = require('discord.js');
 const ms = require('ms');
 // mute command, lotsa code stuff, sorting permissions for channels, saving mute role to database and uhh idk what else more info in later on commenting
 

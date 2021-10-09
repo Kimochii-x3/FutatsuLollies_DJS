@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js-light');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = async (bot, message) => {
     if (message.channel.type !== 'dm') {

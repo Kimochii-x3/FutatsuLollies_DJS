@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js-light');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = async (bot, oldEmoji, newEmoji) => {
     const rows = await bot.db.query(`select * from serverInfo where serverID = ${newEmoji.guild.id}`).catch(bot.errHandle);
