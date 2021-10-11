@@ -167,7 +167,7 @@ bot.on('messageCreate', async message => {
             if (!message.content.toLowerCase().startsWith(prefix)) { return; }
             const args = message.content.slice(prefix.length).split(/ +/);
             const cmdName = args.shift().toLowerCase();
-            const option = message.content.slice(prefix.length + cmdName.length).split(/-+/);
+            const option = message.content.slice(prefix.length + cmdName.length).split(/-+/).trim();
             if (!commands.has(cmdName)) { return; }
             const cmd = commands.get(cmdName);
             try {
