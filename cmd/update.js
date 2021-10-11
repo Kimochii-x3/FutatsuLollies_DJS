@@ -17,7 +17,12 @@ module.exports = {
                 await bot.db.query(`update botStats set motd =NULL`).catch(bot.errHandle);
                 await bot.user.setActivity(`${bot.guilds.cache.size} servers`, { type: 'watching' });
             } else if (option[1] === 'update') {
-                require("child_process").exec("git pull")/*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => message.channel.send(err, {code: "js"}))*/;
+                try {
+                    require("child_process").exec("git pull");
+                } catch (err) {
+                    message.channel.send(err, {code: "js"});
+                }
+                /*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => )*/
             }
         } else if (message.author.id !== (bot.owner.id || bot.maintainer.id)) {
             return message.react('🤔').catch(bot.errHandle);;
