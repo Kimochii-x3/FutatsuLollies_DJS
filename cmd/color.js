@@ -42,7 +42,6 @@ module.exports = {
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                                 placeholder.setColor(hexCode).then(async placeholderRole => {
                                 const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
-                                console.log(filter.interaction);
                                 // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
                                 message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
                                     // await botMsg.react('✅').catch(bot.errHandle);
@@ -56,18 +55,18 @@ module.exports = {
                                             .setColor(message.member.displayHexColor);
                                             message.guild.roles.create({ data: { name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1 } }).then(async userRole => {
                                                 message.member.roles.add(userRole, 'Adding the custom color role to the requester');
-                                                botMsg.edit({embeds: [acceptEmbed]}).then(async botMsgDelete => { setTimeout(() => {
+                                                botMsg.edit({embeds: [acceptEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                     botMsgDelete.delete().catch(bot.errHandle); });
-                                                }, 12_000);
+                                                }, 12_000);*/
                                             });
                                         } else if (interaction.customId === 'no') {
                                             const latestEmbed = botMsg.embeds[0];
                                             const cancelEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Cancelled**')
                                             .setColor(message.member.displayHexColor);
-                                            botMsg.edit({embeds: [cancelEmbed]}).then(async botMsgDelete => { setTimeout(() => {
+                                            botMsg.edit({embeds: [cancelEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                 botMsgDelete.delete().catch(bot.errHandle); });
-                                            }, 12_000);
+                                            }, 12_000);*/
                                         }
                                     }).catch(err => {
                                         console.log(err);
@@ -75,9 +74,9 @@ module.exports = {
                                         const noResponseEmbed = new MessageEmbed(latestEmbed)
                                         .setDescription('**Times Up**')
                                         .setColor(botMsg.member.displayHexColor);
-                                        botMsg.edit({embeds: [noResponseEmbed]}).then(async botMsgDelete => { setTimeout(() => {
+                                        botMsg.edit({embeds: [noResponseEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                             botMsgDelete.delete().catch(bot.errHandle); });
-                                        }, 12_000);
+                                        }, 12_000);*/
                                     });
                                 }).catch(bot.errHandle);
                             }).catch(bot.errHandle);
@@ -93,7 +92,6 @@ module.exports = {
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                             placeholder.setColor(hexCode).then( async placeholderRole => {
                                 const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
-                                console.log(filter.interaction);
                                 // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
                                 message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
                                     // await botMsg.react('✅').catch(bot.errHandle);
@@ -106,17 +104,17 @@ module.exports = {
                                             .setDescription('**Role Updated**')
                                             .setColor(message.member.displayHexColor);
                                             roleColor.setColor(hexCode).catch(bot.errHandle);
-                                            botMsg.edit({embeds: [acceptEmbed]}).then(async botMsgDelete => { setTimeout(() => {
+                                            botMsg.edit({embeds: [acceptEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                 botMsgDelete.delete().catch(bot.errHandle); });
-                                            }, 12_000);
+                                            }, 12_000);*/
                                         } else if (interaction.customId === 'no') {
                                             const latestEmbed = botMsg.embeds[0];
                                             const cancelEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Cancelled**')
                                             .setColor(message.member.displayHexColor);
-                                            botMsg.edit({embeds: [cancelEmbed]}).then(async botMsgDelete => { setTimeout(() => {
+                                            botMsg.edit({embeds: [cancelEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                 botMsgDelete.delete().catch(bot.errHandle); });
-                                            }, 12_000);
+                                            }, 12_000);*/
                                         }
                                     }).catch(err => {
                                         console.log(err);
@@ -124,9 +122,9 @@ module.exports = {
                                         const noResponseEmbed = new MessageEmbed(latestEmbed)
                                         .setDescription('**Times Up**')
                                         .setColor(botMsg.member.displayHexColor);
-                                        botMsg.edit({embeds: [noResponseEmbed]}).then(async botMsgDelete => { setTimeout(() => {
+                                        botMsg.edit({embeds: [noResponseEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                             botMsgDelete.delete().catch(bot.errHandle); });
-                                        }, 12_000);
+                                        }, 12_000);*/
                                     });
                                 }).catch(bot.errHandle);
                             }).catch(bot.errHandle);
