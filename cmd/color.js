@@ -27,11 +27,11 @@ module.exports = {
                     new MessageButton()
                     .setCustomId('yes')
                     .setLabel('Yes')
-                    .setStyle('primary'),
+                    .setStyle('PRIMARY'),
                     new MessageButton()
                     .setCustomId('no')
                     .setLabel('No')
-                    .setStyle('primary'),
+                    .setStyle('PRIMARY'),
                 );
                 if (!idOthers) {
                     if (!roleColor) {
