@@ -39,7 +39,7 @@ module.exports = {
                             return message.channel.send('No role found').catch(bot.errHandle);
                         } else if (hexCode) {
                             try {
-                               await Util.resolveColor(hexCode);
+                                Util.resolveColor(hexCode);
                                 placeholder.setColor(hexCode).then(async placeholderRole => {
                                     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
                                     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
@@ -133,7 +133,7 @@ module.exports = {
                             return message.channel.send(`${roleColor} was deleted`).catch(bot.errHandle);
                         } else if (hexCode) {
                             try {
-                                await Util.resolveColor(hexCode);
+                                Util.resolveColor(hexCode);
                                 placeholder.setColor(hexCode).then( async placeholderRole => {
                                     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
                                     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
