@@ -1,4 +1,4 @@
-const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
+const {Util, MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
 // color command used to create a custom role color based on hex bot's color command, however it doesn't use external functions like hex bot does
 module.exports = {
     name: 'color',
@@ -37,49 +37,93 @@ module.exports = {
                     if (!roleColor) {
                         if (!hexCode) {
                             return message.channel.send('No role found').catch(bot.errHandle);
+                        } else if (hexCode) {
+                            try {
+                               await Util.resolveColor(hexCode);
+                                placeholder.setColor(hexCode).then(async placeholderRole => {
+                                    const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
+                                    message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
+                                        await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async interaction => {
+                                            if (interaction.customId === 'yes') {
+                                                const latestEmbed = botMsg.embeds[0];
+                                                const acceptEmbed = new MessageEmbed(latestEmbed)
+                                                .setDescription('**Role set**')
+                                                .setColor(message.member.displayHexColor);
+                                                message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
+                                                    message.member.roles.add(userRole, 'Adding the custom color role to the requester');
+                                                    botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                                                        botMsgDelete.delete().catch(bot.errHandle); });
+                                                    }, 12_000);*/
+                                                });
+                                            } else if (interaction.customId === 'no') {
+                                                const latestEmbed = botMsg.embeds[0];
+                                                const cancelEmbed = new MessageEmbed(latestEmbed)
+                                                .setDescription('**Cancelled**')
+                                                .setColor(message.member.displayHexColor);
+                                                botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                                                    botMsgDelete.delete().catch(bot.errHandle); });
+                                                }, 12_000);*/
+                                            }
+                                        }).catch(err => {
+                                            console.log(err);
+                                            const latestEmbed = botMsg.embeds[0];
+                                            const noResponseEmbed = new MessageEmbed(latestEmbed)
+                                            .setDescription('**Times Up**')
+                                            .setColor(botMsg.member.displayHexColor);
+                                            botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                                                botMsgDelete.delete().catch(bot.errHandle); });
+                                            }, 12_000);*/
+                                        });
+                                    }).catch(bot.errHandle);
+                                }).catch(bot.errHandle);
+                            } catch (error) {
+                                return message.channel.send(`I was unable to resolve the color, acceptable formats are:\n
+                                1. RGB Array - [0 to 255, 0 to 255, 0 to 255]\n
+                                2. Hexstring - starting with # and containing 6 chars (from 0 to 9 and from a to f)\n
+                                3. String - one of the following:\n
+                                DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
+                                NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
+                                DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`).catch(bot.errHandle);
+                            }
                         } else if (!hexCode.startsWith('#')) {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
-                                placeholder.setColor(hexCode).then(async placeholderRole => {
-                                const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
-                                // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
-                                message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
-                                    // await botMsg.react('✅').catch(bot.errHandle);
-                                    // await botMsg.react('❌').catch(bot.errHandle);
-                                    await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async interaction => {
-                                        // const reaction = reacts.first();
-                                        if (interaction.customId === 'yes') {
-                                            const latestEmbed = botMsg.embeds[0];
-                                            const acceptEmbed = new MessageEmbed(latestEmbed)
-                                            .setDescription('**Role set**')
-                                            .setColor(message.member.displayHexColor);
-                                            message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
-                                                message.member.roles.add(userRole, 'Adding the custom color role to the requester');
-                                                botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                                                    botMsgDelete.delete().catch(bot.errHandle); });
-                                                }, 12_000);*/
-                                            });
-                                        } else if (interaction.customId === 'no') {
-                                            const latestEmbed = botMsg.embeds[0];
-                                            const cancelEmbed = new MessageEmbed(latestEmbed)
-                                            .setDescription('**Cancelled**')
-                                            .setColor(message.member.displayHexColor);
-                                            botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                                                botMsgDelete.delete().catch(bot.errHandle); });
-                                            }, 12_000);*/
-                                        }
-                                    }).catch(err => {
-                                        console.log(err);
-                                        const latestEmbed = botMsg.embeds[0];
-                                        const noResponseEmbed = new MessageEmbed(latestEmbed)
-                                        .setDescription('**Times Up**')
-                                        .setColor(botMsg.member.displayHexColor);
-                                        botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                                            botMsgDelete.delete().catch(bot.errHandle); });
-                                        }, 12_000);*/
-                                    });
-                                }).catch(bot.errHandle);
-                            }).catch(bot.errHandle);
+                            //     placeholder.setColor(hexCode).then(async placeholderRole => {
+                            //     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
+                            //     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
+                            //         await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async interaction => {
+                            //             if (interaction.customId === 'yes') {
+                            //                 const latestEmbed = botMsg.embeds[0];
+                            //                 const acceptEmbed = new MessageEmbed(latestEmbed)
+                            //                 .setDescription('**Role set**')
+                            //                 .setColor(message.member.displayHexColor);
+                            //                 message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
+                            //                     message.member.roles.add(userRole, 'Adding the custom color role to the requester');
+                            //                     botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                            //                         botMsgDelete.delete().catch(bot.errHandle); });
+                            //                     }, 12_000);*/
+                            //                 });
+                            //             } else if (interaction.customId === 'no') {
+                            //                 const latestEmbed = botMsg.embeds[0];
+                            //                 const cancelEmbed = new MessageEmbed(latestEmbed)
+                            //                 .setDescription('**Cancelled**')
+                            //                 .setColor(message.member.displayHexColor);
+                            //                 botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                            //                     botMsgDelete.delete().catch(bot.errHandle); });
+                            //                 }, 12_000);*/
+                            //             }
+                            //         }).catch(err => {
+                            //             console.log(err);
+                            //             const latestEmbed = botMsg.embeds[0];
+                            //             const noResponseEmbed = new MessageEmbed(latestEmbed)
+                            //             .setDescription('**Times Up**')
+                            //             .setColor(botMsg.member.displayHexColor);
+                            //             botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                            //                 botMsgDelete.delete().catch(bot.errHandle); });
+                            //             }, 12_000);*/
+                            //         });
+                            //     }).catch(bot.errHandle);
+                            // }).catch(bot.errHandle);
                         }
                     } else {
                         if (!hexCode) {
@@ -87,47 +131,89 @@ module.exports = {
                         } else if (hexCode === 'remove') {
                             roleColor.delete('User requested to delete their custom role').catch(bot.errHandle);
                             return message.channel.send(`${roleColor} was deleted`).catch(bot.errHandle);
+                        } else if (hexCode) {
+                            try {
+                                await Util.resolveColor(hexCode);
+                                placeholder.setColor(hexCode).then( async placeholderRole => {
+                                    const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
+                                    message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
+                                        await botMsg.awaitMessageComponent({filter, time: 12_000, errors: ['time'] }).then(async interaction => {
+                                            if (interaction.customId === 'yes') {
+                                                const latestEmbed = botMsg.embeds[0];
+                                                const acceptEmbed = new MessageEmbed(latestEmbed)
+                                                .setDescription('**Role Updated**')
+                                                .setColor(message.member.displayHexColor);
+                                                roleColor.setColor(hexCode).catch(bot.errHandle);
+                                                botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                                                    botMsgDelete.delete().catch(bot.errHandle); });
+                                                }, 12_000);*/
+                                            } else if (interaction.customId === 'no') {
+                                                const latestEmbed = botMsg.embeds[0];
+                                                const cancelEmbed = new MessageEmbed(latestEmbed)
+                                                .setDescription('**Cancelled**')
+                                                .setColor(message.member.displayHexColor);
+                                                botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                                                    botMsgDelete.delete().catch(bot.errHandle); });
+                                                }, 12_000);*/
+                                            }
+                                        }).catch(err => {
+                                            console.log(err);
+                                            const latestEmbed = botMsg.embeds[0];
+                                            const noResponseEmbed = new MessageEmbed(latestEmbed)
+                                            .setDescription('**Times Up**')
+                                            .setColor(botMsg.member.displayHexColor);
+                                            botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                                                botMsgDelete.delete().catch(bot.errHandle); });
+                                            }, 12_000);*/
+                                        });
+                                    }).catch(bot.errHandle);
+                                }).catch(bot.errHandle);
+                            } catch (error) {
+                                return message.channel.send(`I was unable to resolve the color, acceptable formats are:\n
+                                1. RGB Array - [0 to 255, 0 to 255, 0 to 255]\n
+                                2. Hexstring - starting with # and containing 6 chars (from 0 to 9 and from a to f)\n
+                                3. String - one of the following:\n
+                                DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
+                                NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
+                                DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`).catch(bot.errHandle);
+                            }
                         } else if (!hexCode.startsWith('#')) {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
-                            placeholder.setColor(hexCode).then( async placeholderRole => {
-                                const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
-                                // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
-                                message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
-                                    // await botMsg.react('✅').catch(bot.errHandle);
-                                    // await botMsg.react('❌').catch(bot.errHandle);
-                                    await botMsg.awaitMessageComponent({filter, time: 12_000, errors: ['time'] }).then(async interaction => {
-                                        // const reaction = reacts.first();
-                                        if (interaction.customId === 'yes') {
-                                            const latestEmbed = botMsg.embeds[0];
-                                            const acceptEmbed = new MessageEmbed(latestEmbed)
-                                            .setDescription('**Role Updated**')
-                                            .setColor(message.member.displayHexColor);
-                                            roleColor.setColor(hexCode).catch(bot.errHandle);
-                                            botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                                                botMsgDelete.delete().catch(bot.errHandle); });
-                                            }, 12_000);*/
-                                        } else if (interaction.customId === 'no') {
-                                            const latestEmbed = botMsg.embeds[0];
-                                            const cancelEmbed = new MessageEmbed(latestEmbed)
-                                            .setDescription('**Cancelled**')
-                                            .setColor(message.member.displayHexColor);
-                                            botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                                                botMsgDelete.delete().catch(bot.errHandle); });
-                                            }, 12_000);*/
-                                        }
-                                    }).catch(err => {
-                                        console.log(err);
-                                        const latestEmbed = botMsg.embeds[0];
-                                        const noResponseEmbed = new MessageEmbed(latestEmbed)
-                                        .setDescription('**Times Up**')
-                                        .setColor(botMsg.member.displayHexColor);
-                                        botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                                            botMsgDelete.delete().catch(bot.errHandle); });
-                                        }, 12_000);*/
-                                    });
-                                }).catch(bot.errHandle);
-                            }).catch(bot.errHandle);
+                            // placeholder.setColor(hexCode).then( async placeholderRole => {
+                            //     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
+                            //     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
+                            //         await botMsg.awaitMessageComponent({filter, time: 12_000, errors: ['time'] }).then(async interaction => {
+                            //             if (interaction.customId === 'yes') {
+                            //                 const latestEmbed = botMsg.embeds[0];
+                            //                 const acceptEmbed = new MessageEmbed(latestEmbed)
+                            //                 .setDescription('**Role Updated**')
+                            //                 .setColor(message.member.displayHexColor);
+                            //                 roleColor.setColor(hexCode).catch(bot.errHandle);
+                            //                 botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                            //                     botMsgDelete.delete().catch(bot.errHandle); });
+                            //                 }, 12_000);*/
+                            //             } else if (interaction.customId === 'no') {
+                            //                 const latestEmbed = botMsg.embeds[0];
+                            //                 const cancelEmbed = new MessageEmbed(latestEmbed)
+                            //                 .setDescription('**Cancelled**')
+                            //                 .setColor(message.member.displayHexColor);
+                            //                 botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                            //                     botMsgDelete.delete().catch(bot.errHandle); });
+                            //                 }, 12_000);*/
+                            //             }
+                            //         }).catch(err => {
+                            //             console.log(err);
+                            //             const latestEmbed = botMsg.embeds[0];
+                            //             const noResponseEmbed = new MessageEmbed(latestEmbed)
+                            //             .setDescription('**Times Up**')
+                            //             .setColor(botMsg.member.displayHexColor);
+                            //             botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
+                            //                 botMsgDelete.delete().catch(bot.errHandle); });
+                            //             }, 12_000);*/
+                            //         });
+                            //     }).catch(bot.errHandle);
+                            // }).catch(bot.errHandle);
                         }
                     }
                 } else {
