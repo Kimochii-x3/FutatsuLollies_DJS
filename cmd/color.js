@@ -68,7 +68,8 @@ module.exports = {
                                                 botMsgDelete.delete().catch(bot.errHandle); });
                                             }, 12_000);
                                         }
-                                    }).catch(() => {
+                                    }).catch(err => {
+                                        console.log(err);
                                         const latestEmbed = botMsg.embeds[0];
                                         const noResponseEmbed = new MessageEmbed(latestEmbed)
                                         .setDescription('**Times Up**')
@@ -115,7 +116,8 @@ module.exports = {
                                                 botMsgDelete.delete().catch(bot.errHandle); });
                                             }, 12_000);
                                         }
-                                    }).catch(() => {
+                                    }).catch(err => {
+                                        console.log(err);
                                         const latestEmbed = botMsg.embeds[0];
                                         const noResponseEmbed = new MessageEmbed(latestEmbed)
                                         .setDescription('**Times Up**')
