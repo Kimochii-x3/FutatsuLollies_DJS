@@ -20,10 +20,10 @@ module.exports = {
                 try {
                     require("child_process").execSync("git pull");
                     message.channel.send('Download done.');
-                    return setTimeout(() => {
-                        message.channel.send('Restarting!');
+                    return setTimeout(async () => {
+                        await message.channel.send('Restarting!');
                         return require("child_process").execSync("pm2 restart FutatsuLollies");
-                    }, 2000);
+                    }, 3000);
                 } catch (err) {
                     return message.channel.send(err, {code: "js"});
                 }
