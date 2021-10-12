@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
 // color command used to create a custom role color based on hex bot's color command, however it doesn't use external functions like hex bot does
 module.exports = {
     name: 'color',
@@ -22,6 +22,17 @@ module.exports = {
                 const rolePreview = new MessageEmbed()
                 .setDescription(`**Your role will look like this: \n${placeholder}\n${placeholder}\n${placeholder}\nDo you want to change your color?**`)
                 .setColor(message.member.displayHexColor);
+                const rolePreviewButtons = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                    .setCustomId('yes')
+                    .setLabel('Yes')
+                    .setStyle('primary'),
+                    new MessageButton()
+                    .setCustomId('no')
+                    .setLabel('No')
+                    .setStyle('primary'),
+                );
                 if (!idOthers) {
                     if (!roleColor) {
                         if (!hexCode) {
@@ -30,13 +41,14 @@ module.exports = {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                                 placeholder.setColor(hexCode).then(async placeholderRole => {
-                                const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
-                                message.channel.send({embeds: [rolePreview]}).then(async botMsg => {
-                                    await botMsg.react('✅').catch(bot.errHandle);
-                                    await botMsg.react('❌').catch(bot.errHandle);
-                                    await botMsg.awaitReactions(filter, { max: 1, time: 12000, errors: ['time'] }).then(async reacts => {
-                                        const reaction = reacts.first();
-                                        if (reaction.emoji.name === '✅') {
+                                const filter = (interaction) => interaction.customId === ['yes', 'no'] && interaction.user.id === message.author.id;
+                                // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
+                                message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
+                                    // await botMsg.react('✅').catch(bot.errHandle);
+                                    // await botMsg.react('❌').catch(bot.errHandle);
+                                    await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async reacts => {
+                                        // const reaction = reacts.first();
+                                        if (interaction.customId === 'yes') {
                                             const latestEmbed = botMsg.embeds[0];
                                             const acceptEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Role set**')
@@ -45,7 +57,7 @@ module.exports = {
                                                 message.member.roles.add(userRole, 'Adding the custom color role to the requester');
                                                 botMsg.edit({embeds: [acceptEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
                                             });
-                                        } else if (reaction.emoji.name === '❌') {
+                                        } else if (interaction.customId === 'no') {
                                             const latestEmbed = botMsg.embeds[0];
                                             const cancelEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Cancelled**')
@@ -72,20 +84,21 @@ module.exports = {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                             placeholder.setColor(hexCode).then( async placeholderRole => {
-                                const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
-                                message.channel.send({embeds: [rolePreview]}).then(async botMsg => {
-                                    await botMsg.react('✅').catch(bot.errHandle);
-                                    await botMsg.react('❌').catch(bot.errHandle);
-                                    await botMsg.awaitReactions(filter, { max: 1, time: 12000, errors: ['time'] }).then(async reacts => {
-                                        const reaction = reacts.first();
-                                        if (reaction.emoji.name === '✅') {
+                                const filter = (interaction) => interaction.customId === ['yes', 'no'] && interaction.user.id === message.author.id;
+                                // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
+                                message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
+                                    // await botMsg.react('✅').catch(bot.errHandle);
+                                    // await botMsg.react('❌').catch(bot.errHandle);
+                                    await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async reacts => {
+                                        // const reaction = reacts.first();
+                                        if (interaction.customId === 'yes') {
                                             const latestEmbed = botMsg.embeds[0];
                                             const acceptEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Role Updated**')
                                             .setColor(message.member.displayHexColor);
                                             roleColor.setColor(hexCode).catch(bot.errHandle);
                                             botMsg.edit({embeds: [acceptEmbed]}).then(async botMsgDelete => { botMsgDelete.delete( { timeout: 2000 } ).catch(bot.errHandle); }).catch(bot.errHandle);
-                                        } else if (reaction.emoji.name === '❌') {
+                                        } else if (interaction.customId === 'no') {
                                             const latestEmbed = botMsg.embeds[0];
                                             const cancelEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Cancelled**')

@@ -18,9 +18,14 @@ module.exports = {
                 await bot.user.setActivity(`${bot.guilds.cache.size} servers`, { type: 'watching' });
             } else if (option[1] === 'update') {
                 try {
-                    require("child_process").exec("git pull");
+                    require("child_process").execSync("git pull");
+                    message.channel.send('Download done.');
+                    return setTimeout(() => {
+                        message.channel.send('Restarting!');
+                        return require("child_process").execSync("pm2 restart FutatsuLollies");
+                    }, 2000);
                 } catch (err) {
-                    message.channel.send(err, {code: "js"});
+                    return message.channel.send(err, {code: "js"});
                 }
                 /*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => )*/
             }
