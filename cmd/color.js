@@ -41,7 +41,7 @@ module.exports = {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                                 placeholder.setColor(hexCode).then(async placeholderRole => {
-                                const filter = (interaction) => (Interaction.customId === 'yes' || Interaction.customId === 'no') && Interaction.user.id === message.author.id;
+                                const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
                                 console.log(filter);
                                 // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
                                 message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
@@ -92,7 +92,7 @@ module.exports = {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
                         } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
                             placeholder.setColor(hexCode).then( async placeholderRole => {
-                                const filter = (interaction) => (Interaction.customId === 'yes' || Interaction.customId === 'no') && Interaction.user.id === message.author.id;
+                                const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
                                 console.log(filter);
                                 // const filter = (reaction, user) => ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
                                 message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
