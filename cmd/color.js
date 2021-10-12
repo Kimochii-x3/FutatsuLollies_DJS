@@ -53,7 +53,7 @@ module.exports = {
                                             const acceptEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Role set**')
                                             .setColor(message.member.displayHexColor);
-                                            message.guild.roles.create({ data: { name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1 } }).then(async userRole => {
+                                            message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: 0, reason: 'User requested role thru a command'}).then(async userRole => {
                                                 message.member.roles.add(userRole, 'Adding the custom color role to the requester');
                                                 botMsg.edit({embeds: [acceptEmbed]}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                     botMsgDelete.delete().catch(bot.errHandle); });
@@ -144,7 +144,7 @@ module.exports = {
             // after finding perms, it checks if a placeholder role used to preview role colors exists, if not i'll try to create it, else it'll carry on with code
             const phC = message.guild.roles.cache.find(r => r.name === '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇');
             if (!phC) {
-                message.guild.roles.create({ data: { name: '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇' }, reason: 'Creating a placeholder role to preview the colors'}).catch(bot.errHandle);
+                message.guild.roles.create({ name: '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇', reason: 'Creating a placeholder role to preview the colors',}).catch(bot.errHandle);
                 return colorChanger();
             } else {
                 return colorChanger();
