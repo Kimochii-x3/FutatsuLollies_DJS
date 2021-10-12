@@ -19,6 +19,15 @@ module.exports = {
                 const idOthers = message.mentions.members.first();
                 const roleColor = message.guild.roles.cache.find(r => r.name === `USER-${message.author.id}`);
                 const placeholder = message.guild.roles.cache.find(r => r.name === '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇');
+                const errEmbed = new MessageEmbed()
+                .setDescription(`I was unable to resolve the color, acceptable formats are:\n
+                1. RGB Array - [0 to 255, 0 to 255, 0 to 255]\n
+                2. Hexstring - starting with # and containing 6 chars (from 0 to 9 and from a to f)\n
+                3. String - one of the following:\n
+                DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
+                NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
+                DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`)
+                .setColor(message.member.displayHexColor);
                 const rolePreview = new MessageEmbed()
                 .setDescription(`**Your role will look like this: \n${placeholder}\n${placeholder}\n${placeholder}\nDo you want to change your color?**`)
                 .setColor(message.member.displayHexColor);
@@ -77,13 +86,8 @@ module.exports = {
                                     }).catch(bot.errHandle);
                                 }).catch(bot.errHandle);
                             } catch (error) {
-                                return message.channel.send(`I was unable to resolve the color, acceptable formats are:\n
-                                1. RGB Array - [0 to 255, 0 to 255, 0 to 255]\n
-                                2. Hexstring - starting with # and containing 6 chars (from 0 to 9 and from a to f)\n
-                                3. String - one of the following:\n
-                                DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
-                                NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
-                                DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`).catch(bot.errHandle);
+                                console.log(error);
+                                return message.channel.send({embeds: [errEmbed]}).catch(bot.errHandle);
                             }
                         } else if (!hexCode.startsWith('#')) {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
@@ -169,13 +173,8 @@ module.exports = {
                                     }).catch(bot.errHandle);
                                 }).catch(bot.errHandle);
                             } catch (error) {
-                                return message.channel.send(`I was unable to resolve the color, acceptable formats are:\n
-                                1. RGB Array - [0 to 255, 0 to 255, 0 to 255]\n
-                                2. Hexstring - starting with # and containing 6 chars (from 0 to 9 and from a to f)\n
-                                3. String - one of the following:\n
-                                DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
-                                NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
-                                DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`).catch(bot.errHandle);
+                                console.log(error);
+                                return message.channel.send({embeds: [errEmbed]}).catch(bot.errHandle);
                             }
                         } else if (!hexCode.startsWith('#')) {
                             return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
