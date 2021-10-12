@@ -53,7 +53,7 @@ module.exports = {
                                             const acceptEmbed = new MessageEmbed(latestEmbed)
                                             .setDescription('**Role set**')
                                             .setColor(message.member.displayHexColor);
-                                            message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: 0, reason: 'User requested role thru a command'}).then(async userRole => {
+                                            message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
                                                 message.member.roles.add(userRole, 'Adding the custom color role to the requester');
                                                 botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                     botMsgDelete.delete().catch(bot.errHandle); });
