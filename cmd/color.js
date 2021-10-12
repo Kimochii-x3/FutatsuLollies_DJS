@@ -21,9 +21,9 @@ module.exports = {
                 const placeholder = message.guild.roles.cache.find(r => r.name === '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇');
                 const errEmbed = new MessageEmbed()
                 .setDescription(`I was unable to resolve the color, acceptable formats are:\n
-                1. RGB Array - [0 to 255, 0 to 255, 0 to 255]\n
-                2. Hexstring - starting with # and containing 6 chars (from 0 to 9 and from a to f)\n
-                3. String - one of the following:\n
+                1. RGB Array - 0 to 255, 0 to 255, 0 to 255 > 191,61,87\n
+                2. Hexstring - containing 6 chars (from 0 to 9 and from a to f) > f47fff\n
+                3. String - one of the following (has to be as it is written, just copy and paste, mobile users have to write it):\n
                 DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
                 NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
                 DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`)
