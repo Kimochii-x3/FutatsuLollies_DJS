@@ -29,7 +29,7 @@ module.exports = {
             //     }
             //     /*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => )*/
             // }
-
+            console.log(option);
             switch (option.slice(1)) {
                 case ['set', 'motd']: {
                     await bot.db.query('update botStats set motd = ?', [option[0]]).catch(bot.errHandle);
