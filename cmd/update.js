@@ -55,7 +55,7 @@ module.exports = {
                 }
             }
         } else if (message.author.id !== (bot.owner.id || bot.maintainer.id)) {
-            message.channel.send(bot.maintainer.id)
+            message.channel.send(bot.maintainer.id === message.author.id)
             return message.react('🤔').catch(bot.errHandle);;
         }
     }
