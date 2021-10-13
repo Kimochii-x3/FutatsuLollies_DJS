@@ -29,23 +29,19 @@ module.exports = {
             //     }
             //     /*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => )*/
             // }
-            console.log('string option with 1 slice '+option.slice(1).toString());
-            switch (option.slice(1)) {
-                case ['set', 'motd']: {
-                    console.log('option set motd ' + option);
+            
+            switch (option.slice(1).toString()) {
+                case 'set,motd': {
                     await bot.db.query('update botStats set motd = ?', [option[0]]).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers / MOTD: ${option[0]}`, { type: 'watching' });
                     return message.channel.send('MOTD updated').catch(bot.errHandle);
                 }
-
-                case ['delete', 'motd']: {
-                    console.log('option delete motd ' + option);
+                case 'delete,motd': {
                     await bot.db.query(`update botStats set motd = NULL`).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers`, { type: 'watching' });
                     return message.channel.send('MOTD deleted').catch(bot.errHandle);
                 }
-
-                case ['update']: {
+                case 'update': {
                     console.log('option update ' + option);
                     try {
                         let out = require("child_process").execSync("git pull").toString();
@@ -58,9 +54,10 @@ module.exports = {
                         return message.channel.send({content: err, code: "js"});
                     }
                 }
+                default: { return; }
             }
         } else {
-            return message.react('🤔').catch(bot.errHandle);;
+            return message.react('🤔').catch(bot.errHandle);
         }
     }
 };
