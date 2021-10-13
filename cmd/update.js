@@ -30,18 +30,18 @@ module.exports = {
             //     /*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => )*/
             // }
 
-            switch (option[1]) {
-                case 'set': {
+            switch (option.slice(1)) {
+                case ['set', 'motd']: {
                     await bot.db.query('update botStats set motd = ?', [option[0]]).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers / MOTD: ${option[0]}`, { type: 'watching' });
                 }
 
-                case 'delete': {
+                case ['delete', 'motd']: {
                     await bot.db.query(`update botStats set motd = NULL`).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers`, { type: 'watching' });
                 }
 
-                case 'update': {
+                case ['update']: {
                     try {
                         let out = require("child_process").execSync("git pull").toString();
                         message.channel.send(out, {code: "css"});
