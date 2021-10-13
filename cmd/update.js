@@ -9,7 +9,7 @@ module.exports = {
     args: false,
     async execute(bot, message, args, option, commands, prefix) {
         // prefix and command length get removed, option[0] is always the text before the first > - < (minus).
-        if (message.author.id === (bot.owner.id || bot.maintainer.id)) {
+        if (message.author.id === bot.owner.id || message.author.id === bot.maintainer.id) {
             // if (option[1] === 'set' && option[2] === 'motd') {
             //     await bot.db.query('update botStats set motd = ?', [option[0]]).catch(bot.errHandle);
             //     await bot.user.setActivity(`${bot.guilds.cache.size} servers / MOTD: ${option[0]}`, { type: 'watching' });
