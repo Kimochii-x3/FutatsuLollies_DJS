@@ -34,23 +34,25 @@ module.exports = {
                 case ['set', 'motd']: {
                     await bot.db.query('update botStats set motd = ?', [option[0]]).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers / MOTD: ${option[0]}`, { type: 'watching' });
+                    return message.channel.send('MOTD updated').catch(bot.errHandle);
                 }
 
                 case ['delete', 'motd']: {
                     await bot.db.query(`update botStats set motd = NULL`).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers`, { type: 'watching' });
+                    return message.channel.send('MOTD deleted').catch(bot.errHandle);
                 }
 
                 case ['update']: {
                     try {
                         let out = require("child_process").execSync("git pull").toString();
-                        message.channel.send(out, {code: "css"});
+                        message.channel.send({content: out, code: "css"}).catch(bot.errHandle);
                         return setTimeout(async () => {
-                            await message.channel.send('Restarting!');
+                            await message.channel.send('Restarting!').catch(bot.errHandle);
                             return require("child_process").execSync("pm2 restart FutatsuLollies");
                         }, 3000);
                     } catch (err) {
-                        return message.channel.send(err, {code: "js"});
+                        return message.channel.send({content: err, code: "js"});
                     }
                 }
             }
