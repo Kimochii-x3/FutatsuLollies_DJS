@@ -57,7 +57,7 @@ bot.once('ready', async () => {
     // fetches the MOTD from the database and sets it as the bot's status
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
     try {
-        if (status && status[0].motd.length > 1) {
+        if (status && status[0].motd != null) {
             bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING' });
         } else {
             bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' });
