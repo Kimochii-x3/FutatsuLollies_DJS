@@ -30,31 +30,29 @@ module.exports = {
             //     /*.then((out) => message.channel.send(out, {code: "css"})).catch((err) => )*/
             // }
             
-            switch (option.slice(1).toString()) {
-                case 'set,motd': {
+            switch (option.slice(1).reduce((c, e) => c += "-" + e)) {
+                case "set-motd": {
                     await bot.db.query('update botStats set motd = ?', [option[0]]).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers / MOTD: ${option[0]}`, { type: 'watching' });
-                    return message.channel.send('MOTD updated').catch(bot.errHandle);
                 }
-                case 'delete,motd': {
+
+                case "delete-motd": {
                     await bot.db.query(`update botStats set motd = NULL`).catch(bot.errHandle);
                     await bot.user.setActivity(`${bot.guilds.cache.size} servers`, { type: 'watching' });
-                    return message.channel.send('MOTD deleted').catch(bot.errHandle);
                 }
-                case 'update': {
-                    console.log('option update ' + option);
+
+                case "update": {
                     try {
                         let out = require("child_process").execSync("git pull").toString();
-                        message.channel.send({content: out, code: "css"}).catch(bot.errHandle);
+                        message.channel.send(out, {code: "css"});
                         return setTimeout(async () => {
-                            await message.channel.send('Restarting!').catch(bot.errHandle);
+                            await message.channel.send('Restarting!');
                             return require("child_process").execSync("pm2 restart FutatsuLollies");
                         }, 3000);
                     } catch (err) {
-                        return message.channel.send({content: err, code: "js"});
+                        return message.channel.send(err, {code: "js"});
                     }
                 }
-                default: { return; }
             }
         } else {
             return message.react('🤔').catch(bot.errHandle);
