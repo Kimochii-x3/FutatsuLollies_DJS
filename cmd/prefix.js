@@ -9,7 +9,7 @@ module.exports = {
     args: false,
     async execute(bot, message, args, option, commands, prefix) {
         if (!args[0]) {
-            return message.channel.send(`My prefix for this server is \`${prefix}\`, default prefix is \`fl.\``).catch(bot.errHandle);
+            return message.channel.send(`My prefix for this server is \`${prefix}\` - default prefix is \`fl.\``).catch(bot.errHandle);
         } else {
             if (option[1] === 'set') {
                 if (message.member.permissions.has('ADMINISTRATOR') || message.author.id === bot.owner.id) {
@@ -19,7 +19,7 @@ module.exports = {
                         await bot.db.query('update serverInfo set prefix = ? where serverID = ?', [args[0].toLowerCase(), message.guild.id]).catch(bot.errHandle);
                         return message.channel.send(`Successfully changed the prefix to \`${args[0].toLowerCase()}\``).catch(bot.errHandle);
                     }
-                } else if (!message.member.permissions.has('ADMINISTRATOR')) {
+                } else {
                     return message.channel.send('You do not have administrator permission').catch(bot.errHandle);
                 }
             }

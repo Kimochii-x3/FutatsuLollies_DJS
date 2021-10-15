@@ -3,11 +3,12 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'log',
     description: 'enable/disable event logging (you need administrator permission to use this command)',
-    usage: 'fl.log Y -set (logging enabled); fl.log N -set (logging disabled)',
+    usage: 'fl.log y -set (logging enabled); fl.log n -set (logging disabled)',
     cd: 0,
     guildOnly: true,
     args: true,
     async execute (bot, message, args, option, commands, prefix) {
+        // TO-DO: this to be further changed on which guild events you would like to log for a specific guild
         if (message.member.permissions.has('ADMINISTRATOR', { checkAdmin: true }) || message.author.id === bot.owner.id) {
             const rows = await bot.db.query('select * from serverInfo where serverID = ?', [message.guild.id]).catch(bot.errHandle);
             if (option[1] === 'set') {

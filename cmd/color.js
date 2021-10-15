@@ -48,8 +48,8 @@ module.exports = {
                             return message.channel.send('No role found').catch(bot.errHandle);
                         } else if (hexCode) {
                             try {
-                                Util.resolveColor(hexCode);
-                                placeholder.setColor(hexCode).then(async placeholderRole => {
+                                Util.resolveColor(hexCode.toUpperCase());
+                                placeholder.setColor(hexCode.toUpperCase()).then(async placeholderRole => {
                                     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
                                     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
                                         await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async interaction => {
@@ -58,7 +58,7 @@ module.exports = {
                                                 const acceptEmbed = new MessageEmbed(latestEmbed)
                                                 .setDescription('**Role set**')
                                                 .setColor(message.member.displayHexColor);
-                                                message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
+                                                message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode.toUpperCase(), position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
                                                     message.member.roles.add(userRole, 'Adding the custom color role to the requester');
                                                     botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                         botMsgDelete.delete().catch(bot.errHandle); });
@@ -89,56 +89,17 @@ module.exports = {
                                 console.log(error);
                                 return message.channel.send({embeds: [errEmbed]}).catch(bot.errHandle);
                             }
-                        } else if (!hexCode.startsWith('#')) {
-                            return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
-                        } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
-                            //     placeholder.setColor(hexCode).then(async placeholderRole => {
-                            //     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
-                            //     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
-                            //         await botMsg.awaitMessageComponent({filter, time: 12000, errors: ['time'] }).then(async interaction => {
-                            //             if (interaction.customId === 'yes') {
-                            //                 const latestEmbed = botMsg.embeds[0];
-                            //                 const acceptEmbed = new MessageEmbed(latestEmbed)
-                            //                 .setDescription('**Role set**')
-                            //                 .setColor(message.member.displayHexColor);
-                            //                 message.guild.roles.create({name: `USER-${message.author.id}`, color: hexCode, position: placeholder.position +1, permissions: [], reason: 'User requested role thru a command'}).then(async userRole => {
-                            //                     message.member.roles.add(userRole, 'Adding the custom color role to the requester');
-                            //                     botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                            //                         botMsgDelete.delete().catch(bot.errHandle); });
-                            //                     }, 12_000);*/
-                            //                 });
-                            //             } else if (interaction.customId === 'no') {
-                            //                 const latestEmbed = botMsg.embeds[0];
-                            //                 const cancelEmbed = new MessageEmbed(latestEmbed)
-                            //                 .setDescription('**Cancelled**')
-                            //                 .setColor(message.member.displayHexColor);
-                            //                 botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                            //                     botMsgDelete.delete().catch(bot.errHandle); });
-                            //                 }, 12_000);*/
-                            //             }
-                            //         }).catch(err => {
-                            //             console.log(err);
-                            //             const latestEmbed = botMsg.embeds[0];
-                            //             const noResponseEmbed = new MessageEmbed(latestEmbed)
-                            //             .setDescription('**Times Up**')
-                            //             .setColor(botMsg.member.displayHexColor);
-                            //             botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                            //                 botMsgDelete.delete().catch(bot.errHandle); });
-                            //             }, 12_000);*/
-                            //         });
-                            //     }).catch(bot.errHandle);
-                            // }).catch(bot.errHandle);
                         }
                     } else {
                         if (!hexCode) {
                             return message.channel.send(`Your role hex code is: ${roleColor.hexColor}`).catch(bot.errHandle);
-                        } else if (hexCode === 'remove') {
+                        } else if (hexCode.toLowerCase() === 'remove') {
                             roleColor.delete('User requested to delete their custom role').catch(bot.errHandle);
                             return message.channel.send(`${roleColor} was deleted`).catch(bot.errHandle);
                         } else if (hexCode) {
                             try {
-                                Util.resolveColor(hexCode);
-                                placeholder.setColor(hexCode).then( async placeholderRole => {
+                                Util.resolveColor(hexCode.toUpperCase());
+                                placeholder.setColor(hexCode.toUpperCase()).then( async placeholderRole => {
                                     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
                                     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
                                         await botMsg.awaitMessageComponent({filter, time: 12_000, errors: ['time'] }).then(async interaction => {
@@ -147,7 +108,7 @@ module.exports = {
                                                 const acceptEmbed = new MessageEmbed(latestEmbed)
                                                 .setDescription('**Role Updated**')
                                                 .setColor(message.member.displayHexColor);
-                                                roleColor.setColor(hexCode).catch(bot.errHandle);
+                                                roleColor.setColor(hexCode.toUpperCase()).catch(bot.errHandle);
                                                 botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
                                                     botMsgDelete.delete().catch(bot.errHandle); });
                                                 }, 12_000);*/
@@ -176,47 +137,10 @@ module.exports = {
                                 console.log(error);
                                 return message.channel.send({embeds: [errEmbed]}).catch(bot.errHandle);
                             }
-                        } else if (!hexCode.startsWith('#')) {
-                            return message.channel.send('Incorrect hexcode, example: `prefix`.color #ff00ff').catch(bot.errHandle);
-                        } else if (hexCode.startsWith('#')) { // possibly pointless else-if?
-                            // placeholder.setColor(hexCode).then( async placeholderRole => {
-                            //     const filter = (interaction) => (interaction.customId === 'yes' || interaction.customId === 'no') && interaction.user.id === message.author.id;
-                            //     message.channel.send({embeds: [rolePreview], components: [rolePreviewButtons]}).then(async botMsg => {
-                            //         await botMsg.awaitMessageComponent({filter, time: 12_000, errors: ['time'] }).then(async interaction => {
-                            //             if (interaction.customId === 'yes') {
-                            //                 const latestEmbed = botMsg.embeds[0];
-                            //                 const acceptEmbed = new MessageEmbed(latestEmbed)
-                            //                 .setDescription('**Role Updated**')
-                            //                 .setColor(message.member.displayHexColor);
-                            //                 roleColor.setColor(hexCode).catch(bot.errHandle);
-                            //                 botMsg.edit({embeds: [acceptEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                            //                     botMsgDelete.delete().catch(bot.errHandle); });
-                            //                 }, 12_000);*/
-                            //             } else if (interaction.customId === 'no') {
-                            //                 const latestEmbed = botMsg.embeds[0];
-                            //                 const cancelEmbed = new MessageEmbed(latestEmbed)
-                            //                 .setDescription('**Cancelled**')
-                            //                 .setColor(message.member.displayHexColor);
-                            //                 botMsg.edit({embeds: [cancelEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                            //                     botMsgDelete.delete().catch(bot.errHandle); });
-                            //                 }, 12_000);*/
-                            //             }
-                            //         }).catch(err => {
-                            //             console.log(err);
-                            //             const latestEmbed = botMsg.embeds[0];
-                            //             const noResponseEmbed = new MessageEmbed(latestEmbed)
-                            //             .setDescription('**Times Up**')
-                            //             .setColor(botMsg.member.displayHexColor);
-                            //             botMsg.edit({embeds: [noResponseEmbed], components: []}).catch(bot.errHandle);/*.then(async botMsgDelete => { setTimeout(() => {
-                            //                 botMsgDelete.delete().catch(bot.errHandle); });
-                            //             }, 12_000);*/
-                            //         });
-                            //     }).catch(bot.errHandle);
-                            // }).catch(bot.errHandle);
                         }
                     }
                 } else {
-                    if (hexCode === `<@!${idOthers.id}`) { // this could definitely be different lmao like just hexCode === idOthers :omegalul:
+                    if (hexCode === idOthers) { // this could definitely be different lmao like just hexCode === idOthers :omegalul: - finally done?
                         const roleColorOthers = message.guild.roles.cache.find(role => role.name === `USER-${idOthers.id}`);
                         if (!roleColorOthers) {
                             return message.channel.send(`No user role found, however the highest role's hexcode is: ${idOthers.displayHexColor}`).catch(bot.errHandle);

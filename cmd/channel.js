@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 // channel command used to set the logging channel for a server
 module.exports = {
     name: 'channel',
-    description: 'set the event logging channel, requires event logging enabled and the permissions requiested upon inviting the bot [you need administrator permission]',
-    usage: 'fl.channel #<channel name> -set',
+    description: 'set the event logging channel, requires the permissions requiested upon inviting the bot to log successfully [you need administrator permission]',
+    usage: 'fl.channel #<channel name> -set (or -remove to remove stop the logging)',
     cd: 0,
     guildOnly: true,
     args: true,
