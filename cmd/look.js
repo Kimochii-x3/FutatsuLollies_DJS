@@ -20,13 +20,16 @@ module.exports = {
                 case 'banner':
                 {
                     const bannerurl = await bot.users.fetch(mentionedMember.id, {cache: false, force: true}).then(u => {
-                        try {
-                            u.bannerURL({format: 'png', dynamic: true, size: 4096})
-                        } catch (error) {
-                            return message.channel.send('User doesn\'t have a banner');
+                        if (u.banner != null) {
+                            return u.bannerURL({format: 'png', dynamic: true, size: 4096});
+                        } else {
+                            message.channel.send('User doesn\'t have a banner');
+                            return false;
                         }
                     }).catch(bot.errHandle);
-                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    if (bannerurl != false) {
+                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    }
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(mentionedMember.id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
@@ -49,15 +52,10 @@ module.exports = {
                             message.channel.send('User doesn\'t have a banner');
                             return false;
                         }
-                    }).catch(err => {
-                        if (err) { 
-                            bot.errHandle;
-                            return false;
-                        }
-                    });
+                    }).catch(bot.errHandle);
                     if (bannerurl != false) {
                         return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
-                    } else { return message.channel.send('Error occured during fetching from Discord\'s API')}
+                    }
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
@@ -74,13 +72,16 @@ module.exports = {
                 case 'banner':
                 {
                     const bannerurl = await bot.users.fetch(message.author.id, {cache: false, force: true}).then(u => {
-                        try {
-                            u.bannerURL({format: 'png', dynamic: true, size: 4096})
-                        } catch (error) {
-                            return message.channel.send('You don\'t have a banner');
+                        if (u.banner != null) {
+                            return u.bannerURL({format: 'png', dynamic: true, size: 4096});
+                        } else {
+                            message.channel.send('You don\'t have a banner');
+                            return false;
                         }
                     }).catch(bot.errHandle);
-                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    if (bannerurl != false) {
+                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    }
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
