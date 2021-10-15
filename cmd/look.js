@@ -43,6 +43,7 @@ module.exports = {
                 case 'banner':
                 {
                     const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => {
+                        console.log(u.banner);
                         try {
                             u.bannerURL({format: 'png', dynamic: true, size: 4096})
                         } catch (error) {
