@@ -43,12 +43,13 @@ module.exports = {
                 case 'banner':
                 {
                     const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => {
+                        let u = u;
                         if (u.banner != null) {
                             u.bannerURL({format: 'png', dynamic: true, size: 4096})
                         } else {
                             return message.channel.send('User doesn\'t have a banner');
                         }
-                    }).catch(bot.errHandle);
+                    }).catch(err => console.log(err));
                     return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                 }
                 case 'tag': {
