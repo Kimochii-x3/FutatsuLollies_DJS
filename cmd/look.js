@@ -19,12 +19,14 @@ module.exports = {
                 }
                 case 'banner':
                 {
-                    try {
-                        const bannerurl = await bot.users.fetch(mentionedMember.id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
-                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
-                    } catch (error) {
-                        return message.channel.send('User doesn\'t have a banner');
-                    }
+                    const bannerurl = await bot.users.fetch(mentionedMember.id, {cache: false, force: true}).then(u => {
+                        try {
+                            u.bannerURL({format: 'png', dynamic: true, size: 4096})
+                        } catch (error) {
+                            return message.channel.send('User doesn\'t have a banner');
+                        }
+                    }).catch(bot.errHandle);
+                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(mentionedMember.id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
@@ -40,12 +42,14 @@ module.exports = {
                 }
                 case 'banner':
                 {
-                    try {
-                        const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
-                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
-                    } catch (error) {
-                        return message.channel.send('User doesn\'t have a banner');
-                    }
+                    const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => {
+                        try {
+                            u.bannerURL({format: 'png', dynamic: true, size: 4096})
+                        } catch (error) {
+                            return message.channel.send('User doesn\'t have a banner');
+                        }
+                    }).catch(bot.errHandle);
+                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
@@ -61,12 +65,14 @@ module.exports = {
                 }
                 case 'banner':
                 {
-                    try {
-                        const bannerurl = await bot.users.fetch(message.author.id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
-                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
-                    } catch (error) {
-                        message.channel.send('You don\'t have a banner');
-                    }
+                    const bannerurl = await bot.users.fetch(message.author.id, {cache: false, force: true}).then(u => {
+                        try {
+                            u.bannerURL({format: 'png', dynamic: true, size: 4096})
+                        } catch (error) {
+                            return message.channel.send('You don\'t have a banner');
+                        }
+                    }).catch(bot.errHandle);
+                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
