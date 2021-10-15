@@ -24,10 +24,10 @@ module.exports = {
                             return u.bannerURL({format: 'png', dynamic: true, size: 4096});
                         } else {
                             message.channel.send('User doesn\'t have a banner');
-                            return false;
+                            return null;
                         }
                     }).catch(bot.errHandle);
-                    if (bannerurl != false) {
+                    if (bannerurl != null) {
                         return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                     }
                 }
@@ -50,10 +50,10 @@ module.exports = {
                             return u.bannerURL({format: 'png', dynamic: true, size: 4096});
                         } else {
                             message.channel.send('User doesn\'t have a banner');
-                            return false;
+                            return null;
                         }
                     }).catch(bot.errHandle);
-                    if (bannerurl != false) {
+                    if (bannerurl != null) {
                         return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                     }
                 }
@@ -76,10 +76,10 @@ module.exports = {
                             return u.bannerURL({format: 'png', dynamic: true, size: 4096});
                         } else {
                             message.channel.send('You don\'t have a banner');
-                            return false;
+                            return null;
                         }
                     }).catch(bot.errHandle);
-                    if (bannerurl != false) {
+                    if (bannerurl != null) {
                         return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
                     }
                 }
