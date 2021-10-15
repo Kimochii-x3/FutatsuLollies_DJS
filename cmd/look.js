@@ -14,13 +14,17 @@ module.exports = {
         if (mentionedMember) {
             switch (lookup) {
                 case 'avatar': {
-                    const avatarurl = await bot.users.fetch(mentionedMember.id, {cache: false}).then(u => u.avatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
+                    const avatarurl = await bot.users.fetch(mentionedMember.id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
                     return message.channel.send({files: [avatarurl]}).catch(bot.errHandle);
                 }
                 case 'banner':
                 {
-                    const bannerurl = await bot.users.fetch(mentionedMember.id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
-                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    try {
+                        const bannerurl = await bot.users.fetch(mentionedMember.id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
+                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    } catch (error) {
+                        return message.channel.send('User doesn\'t have a banner');
+                    }
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(mentionedMember.id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
@@ -31,13 +35,17 @@ module.exports = {
         } else if (!mentionedMember) {
             switch (lookup) {
                 case 'avatar': {
-                    const avatarurl = await bot.users.fetch(id, {cache: false}).then(u => u.avatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
+                    const avatarurl = await bot.users.fetch(id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
                     return message.channel.send({files: [avatarurl]}).catch(bot.errHandle);
                 }
                 case 'banner':
                 {
-                    const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
-                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    try {
+                        const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
+                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    } catch (error) {
+                        return message.channel.send('User doesn\'t have a banner');
+                    }
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
@@ -48,13 +56,17 @@ module.exports = {
         } else if (!args[1] || !mentionedMember) {
             switch (lookup) {
                 case 'avatar': {
-                    const avatarurl = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.avatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
+                    const avatarurl = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
                     return message.channel.send({files: [avatarurl]}).catch(bot.errHandle);
                 }
                 case 'banner':
                 {
-                    const bannerurl = await bot.users.fetch(message.author.id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
-                    return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    try {
+                        const bannerurl = await bot.users.fetch(message.author.id, {cache: false, force: true}).then(u => u.bannerURL({format: 'png', dynamic: true, size: 4096})).catch(bot.errHandle);
+                        return message.channel.send({files: [bannerurl]}).catch(bot.errHandle);
+                    } catch (error) {
+                        message.channel.send('You don\'t have a banner');
+                    }
                 }
                 case 'tag': {
                     const tag = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.tag).catch(bot.errHandle);
