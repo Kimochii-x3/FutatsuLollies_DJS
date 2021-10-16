@@ -17,8 +17,7 @@ module.exports = {
                     const avatarurl = await bot.users.fetch(mentionedMember.id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
                     return message.channel.send({files: [avatarurl]}).catch(bot.errHandle);
                 }
-                case 'banner':
-                {
+                case 'banner': {
                     const bannerurl = await bot.users.fetch(mentionedMember.id, {cache: false, force: true}).then(u => {
                         if (u.banner != null) {
                             return u.bannerURL({format: 'png', dynamic: true, size: 4096});
@@ -43,8 +42,7 @@ module.exports = {
                     const avatarurl = await bot.users.fetch(id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
                     return message.channel.send({files: [avatarurl]}).catch(bot.errHandle);
                 }
-                case 'banner':
-                {
+                case 'banner': {
                     const bannerurl = await bot.users.fetch(id, {cache: false, force: true}).then(u => {
                         if (u.banner != null) {
                             return u.bannerURL({format: 'png', dynamic: true, size: 4096});
@@ -69,8 +67,7 @@ module.exports = {
                     const avatarurl = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);
                     return message.channel.send({files: [avatarurl]}).catch(bot.errHandle);
                 }
-                case 'banner':
-                {
+                case 'banner': {
                     const bannerurl = await bot.users.fetch(message.author.id, {cache: false, force: true}).then(u => {
                         if (u.banner != null) {
                             return u.bannerURL({format: 'png', dynamic: true, size: 4096});

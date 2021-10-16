@@ -15,7 +15,7 @@ module.exports = {
         } else {
             // after finding that placeholder role exists it has some definitions before carrying on with code, sets up preview embedded message too, then it has basic checks to see if hexCode would be someone mentioned and all that, most of the code after this is just copy paste
             function colorChanger() {
-                const hexCode = args[0];
+                const hexCode = args.reduce((c, e) => c += "_" + e);
                 const idOthers = message.mentions.members.first();
                 const roleColor = message.guild.roles.cache.find(r => r.name === `USER-${message.author.id}`);
                 const placeholder = message.guild.roles.cache.find(r => r.name === '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇');
