@@ -61,7 +61,7 @@ module.exports = {
                 }
                 default: { return; }
             }
-        } else if (!args[1] || !mentionedMember) {
+        } else if (!args[1] && !mentionedMember) {
             switch (lookup) {
                 case 'avatar': {
                     const avatarurl = await bot.users.fetch(message.author.id, {cache: false}).then(u => u.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })).catch(bot.errHandle);

@@ -3,7 +3,7 @@ const {Util, MessageEmbed, MessageActionRow, MessageButton} = require('discord.j
 module.exports = {
     name: 'color',
     description: 'creates a color role for yourself, works only with servers that have roles with the "default" color, also if the creator of the role leaves the server, the role (if it exists) will be deleted; fl.color @<someone> is to get their highest role color',
-    usage: 'fl.color #<hexcode> / fl.color @<someone>',
+    usage: 'fl.color <Basic Color Name>/<Hex Code>/<RGB Number> / fl.color @<someone>',
     cd: 0,
     guildOnly: true,
     args: false,
@@ -21,12 +21,12 @@ module.exports = {
                 const placeholder = message.guild.roles.cache.find(r => r.name === '▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇');
                 const errEmbed = new MessageEmbed()
                 .setDescription(`I was unable to resolve the color, acceptable formats are:\n
-                1. RGB Array - 0 to 255, 0 to 255, 0 to 255 > 191,61,87\n
-                2. Hexstring - containing 6 chars (from 0 to 9 and from a to f) > f47fff\n
-                3. String - one of the following (has to be as it is written, just copy and paste, mobile users have to write it):\n
-                DEFAULT; WHITE; AQUA; GREEN; BLUE; YELLOW; PURPLE; LUMINOUS_VIVID_PINK; FUCHSIA; GOLD; ORANGE; RED; GREY;\n
-                NAVY; DARK_AQUA; DARK_GREEN; DARK_BLUE; DARK_PURPLE; DARK_VIVID_PINK; DARK_GOLD; DARK_ORANGE; DARK_RED;\n
-                DARK_GREY; DARKER_GREY; LIGHT_GREY; DARK_NAVY; BLURPLE; GREYPLE; DARK_BUT_NOT_BLACK; NOT_QUITE_BLACK; RANDOM;`)
+                1. R,G,B Number - 0 to 255, 0 to 255, 0 to 255 **>>** 191,61,87\n
+                2. Hex Code - containing 6 chars (from 0 to 9 and from a to f) **>>** f47fff\n
+                3. Text Name - one of the following (has to be as it is written):\n
+                default; white; aqua; green; blue; yellow; purple; luminous vivid pink; fuchsia; gold; orange; red; grey;\n
+                navy; dark aqua; dark green; dark blue; dark purple; dark vivid pink; dark gold; dark orange; dark red;\n
+                dark grey; darker grey; light grey; dark navy; blurple; greyple; dark but not black; not quite black; random;`)
                 .setColor(message.member.displayHexColor);
                 const rolePreview = new MessageEmbed()
                 .setDescription(`**Your role will look like this: \n${placeholder}\n${placeholder}\n${placeholder}\nDo you want to change your color?**`)
