@@ -33,7 +33,9 @@ module.exports = async (bot, message) => {
 						.setColor('#c4150f')
 						.setTimestamp()
 						.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
-						return logCHNL.send({embeds: [mDelete, ...imageEmbeds]});
+						logCHNL.send({embeds: [mDelete]});
+						logCHNL.send({embeds: imageEmbeds});
+						return
 					} else {
 						mFiles.forEach(async (a) => {
 							if (['.png', '.jpg', '.gif', '.jpeg', '.tiff', '.tif', '.bmp'].some(e => a.includes(e))) {
