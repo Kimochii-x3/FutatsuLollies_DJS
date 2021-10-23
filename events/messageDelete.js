@@ -15,10 +15,10 @@ module.exports = async (bot, message) => {
 						let imageEmbeds = [];
 					
 						if (link.length > 0) {
-							bot.errHandle("there is shit")
 							for (const image of link) {
 								if (!linkRegex.test(image)) continue;
 
+								bot.errHandle("there is shit")
 								imageEmbeds.push(new MessageEmbed()
 								.setAuthor(message.author.tag, message.author.displayAvatarURL())
 								.setColor('#c4150f')
