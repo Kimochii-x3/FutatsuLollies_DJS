@@ -13,9 +13,11 @@ module.exports = async (bot, message) => {
 						const linkRegex = /http(s?):\/\/(\w*\.)?\w+\.\w+/g;
 						const link = linkRegex.exec(message.content);
 						let imageEmbeds = [];
-
+					
 						if (link.length > 0) {
 							for (const image of link) {
+								if (!linkRegex.test(image)) continue;
+
 								imageEmbeds.push(new MessageEmbed()
 								.setAuthor(message.author.tag, message.author.displayAvatarURL())
 								.setColor('#c4150f')
