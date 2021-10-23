@@ -15,6 +15,7 @@ module.exports = async (bot, message) => {
 						let imageEmbeds = [];
 					
 						if (link.length > 0) {
+							bot.errHandle("there is shit")
 							for (const image of link) {
 								if (!linkRegex.test(image)) continue;
 
