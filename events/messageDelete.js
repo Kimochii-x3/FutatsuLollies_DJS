@@ -10,7 +10,7 @@ module.exports = async (bot, message) => {
 				if (rows[0].serverLog === 'Y' && logCHNL) {
 					const mFiles = message.attachments.map(a => a.proxyURL);
 					if (mFiles.length === 0) {
-						const linkRegex = /http(s?):\/\/(\w*\.)?\w+\.\w+/g;
+						const linkRegex = /http(s?):\/\/(\w*\.)?\w+\.\w+(\/)?/g;
 						const link = linkRegex.exec(message.content);
 						let imageEmbeds = [];
 					
