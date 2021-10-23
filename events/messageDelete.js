@@ -16,9 +16,8 @@ module.exports = async (bot, message) => {
 					
 						if (link.length > 0) {
 							for (const image of link) {
+								bot.errHandle(image)
 								if (!linkRegex.test(image)) continue;
-
-								bot.errHandle("there is shit")
 								imageEmbeds.push(new MessageEmbed()
 								.setAuthor(message.author.tag, message.author.displayAvatarURL())
 								.setColor('#c4150f')
