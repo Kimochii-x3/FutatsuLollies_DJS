@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 
 module.exports = async (bot, message) => {
-    if (message.channel.type !== 'dm' || message.author.bot) {
+    if (!message.author.bot || message.channel.type !== 'dm') {
         const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [message.guild.id]).catch(bot.errHandle);
 		if(rows != undefined) {
 			const botPerms = message.guild.me.permissions.has(['SEND_MESSAGES', 'EMBED_LINKS'], { checkAdmin: true });

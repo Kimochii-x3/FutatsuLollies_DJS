@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 // channel command used to set the logging channel for a server
 module.exports = {
     name: 'channel',
