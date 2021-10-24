@@ -4,7 +4,7 @@ module.exports = {
     usage: 'fl.eval <input>',
     cd: 0,
     guildOnly: false,
-    args: true,
+    args: false,
     async execute(bot, message, args, option, commands, prefix) {
         if (message.author.id === (bot.owner.id || bot.maintainer.id)) {
             let output;
