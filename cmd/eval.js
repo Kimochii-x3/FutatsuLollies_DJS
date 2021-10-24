@@ -10,7 +10,7 @@ module.exports = {
             let output;
 
             try {
-                output = eval(args.slice(1).join(" "));
+                output = eval(args.join(" "));
             } catch (error) {
                 message.channel.send({embed: {
                     title: "Eval Error",
@@ -33,7 +33,7 @@ module.exports = {
                 color: "#c4150f",
                 fields: [
                     {
-                        name: "Input 📥", value: `\`\`\`js\n${args.slice(1).join(" ")}\n\`\`\``
+                        name: "Input 📥", value: `\`\`\`js\n${args.join(" ")}\n\`\`\``
                     },
                     {
                         name: "Output 📤", value: `\`\`\`js\n${output}\n\`\`\``
