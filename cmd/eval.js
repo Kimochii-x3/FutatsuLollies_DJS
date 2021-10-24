@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: false,
     args: false,
     async execute(bot, message, args, option, commands, prefix) {
-        if (message.author.id === (bot.owner.id || bot.maintainer.id)) {
+        if (message.author.id === bot.owner.id || message.author.id === bot.maintainer.id) {
             let output;
 
             try {
