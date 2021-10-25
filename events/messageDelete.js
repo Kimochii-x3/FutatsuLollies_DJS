@@ -17,7 +17,6 @@ module.exports = async (bot, message) => {
 						if (link.length > 0) {
 							for (const image of link) {
 								if (!linkRegex.test(image)) continue;
-								bot.errHandle(image)
 
 								imageEmbeds.push(new MessageEmbed()
 								.setAuthor(message.author.tag, message.author.displayAvatarURL())
