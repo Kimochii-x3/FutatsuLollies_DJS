@@ -4,9 +4,10 @@ module.exports = {
     usage: 'fl.eval <input>',
     cd: 0,
     guildOnly: false,
-    args: false,
+    args: true,
     async execute(bot, message, args, option, commands, prefix) {
         if (message.author.id === bot.owner.id || message.author.id === bot.maintainer.id) {
+            bot.errHandle("It knows that i put input")
             let output;
 
             try {
