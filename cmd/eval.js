@@ -7,7 +7,6 @@ module.exports = {
     args: true,
     async execute(bot, message, args, option, commands, prefix) {
         if (message.author.id === bot.owner.id || message.author.id === bot.maintainer.id) {
-            bot.errHandle("It knows that i put input")
             let output;
 
             try {
@@ -15,7 +14,7 @@ module.exports = {
             } catch (error) {
                 message.channel.send({embed: {
                     title: "Eval Error",
-                    color: "#c4150f",
+                    color: 0xc4150f,
                     fields: [
                         {
                             name: "Error", value: `Message: ${error.message}\nType: ${error.type}`
@@ -31,7 +30,7 @@ module.exports = {
 
             message.channel.send({embed: {
                 title: "Eval",
-                color: "#c4150f",
+                color: 0xc4150f,
                 fields: [
                     {
                         name: "Input 📥", value: `\`\`\`js\n${args.join(" ")}\n\`\`\``
