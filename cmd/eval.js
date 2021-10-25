@@ -18,7 +18,7 @@ module.exports = {
                         color: 0xc4150f,
                         fields: [
                             {
-                                name: "Error", value: `Message: ${error.message}\nType: ${error.type}`
+                                name: "Error", value: `**Message:**\t\`${error.message}\`\n**Type:**\t\`${error.type}\``
                             }
                         ]
                     }]
