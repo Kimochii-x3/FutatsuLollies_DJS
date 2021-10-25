@@ -20,7 +20,7 @@ module.exports = {
                             name: "Error", value: `Message: ${error.message}\nType: ${error.type}`
                         }
                     ]
-                }})
+                }}).catch(bot.errHandle)
                 return;
             }
 
@@ -42,7 +42,7 @@ module.exports = {
                         name: "Type", value: `\`${typeof output}\``
                     }
                 ]
-            }})
+            }}).catch(bot.errHandle)
         } else return
     }
 }
