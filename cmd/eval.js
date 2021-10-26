@@ -1,3 +1,5 @@
+let expandEval = require("util").inspect;
+
 module.exports = {
     name: 'eval',
     description: 'Evaluate code',
@@ -10,7 +12,7 @@ module.exports = {
             let output;
 
             try {
-                output = eval(args.join(" "));
+                output = expandEval(eval(args.join(" ")));
             } catch (error) {
                 message.channel.send({
                     embeds: [{
