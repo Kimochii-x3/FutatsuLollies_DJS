@@ -42,7 +42,7 @@ module.exports = {
                             name: "Input 📥", value: `\`\`\`js\n${args.join(" ")}\n\`\`\``
                         },
                         {
-                            name: "Output 📤", value: `\`\`\`js\n${shorten(output, 900, "output longer than 1024")}\n\`\`\``
+                            name: "Output 📤", value: `\`\`\`js\n${shorten(output, 990, "\n\n...output longer than 1024")}\n\`\`\``
                         },
                         {
                             name: "Type", value: `\`${typeof output}\``
