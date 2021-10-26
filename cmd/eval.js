@@ -1,4 +1,5 @@
 let expandEval = require("util").inspect;
+let { shorten } = require("string-toolkit");
 
 module.exports = {
     name: 'eval',
@@ -41,7 +42,7 @@ module.exports = {
                             name: "Input 📥", value: `\`\`\`js\n${args.join(" ")}\n\`\`\``
                         },
                         {
-                            name: "Output 📤", value: `\`\`\`js\n${output}\n\`\`\``
+                            name: "Output 📤", value: `\`\`\`js\n${shorten(output, 998, "output longer than 1024")}\n\`\`\``
                         },
                         {
                             name: "Type", value: `\`${typeof output}\``
