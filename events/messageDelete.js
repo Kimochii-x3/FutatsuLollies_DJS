@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {MessageEmbed, Message} = require('discord.js');
 
 module.exports = async (bot, message) => {
     if (!message.author.bot || message.channel.type !== 'dm') {
@@ -10,21 +10,7 @@ module.exports = async (bot, message) => {
 				if (rows[0].serverLog === 'Y' && logCHNL) {
 					const mFiles = message.attachments.map(a => a.proxyURL);
 					if (mFiles.length === 0) {
-						const linkRegex = /https?:\/\/(-\.)?([^\s/?\.#-]+\.?)+(\/[^\s]*)?/
-						const link = linkRegex.exec(message.content);
-						let imageEmbeds = [];
-					
-						if (link.length > 0) {
-							for (const image of link) {
-								if (!linkRegex.test(image)) continue;
-
-								imageEmbeds.push(new MessageEmbed()
-								.setAuthor(message.author.tag, message.author.displayAvatarURL())
-								.setColor('#c4150f')
-								.setTimestamp()
-								.setImage(image))
-							}
-						}
+						let embeds = message.embeds;
 
 						const mDelete = new MessageEmbed()
 						.setAuthor(message.author.tag, message.author.displayAvatarURL())
@@ -33,7 +19,18 @@ module.exports = async (bot, message) => {
 						.setTimestamp()
 						.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 						logCHNL.send({embeds: [mDelete]});
-						logCHNL.send({embeds: imageEmbeds});
+
+						for (const embed of embeds) {
+							let tempMsg = new MessageEmbed()
+							.setAuthor(message.author.tag, message.author.displayAvatarURL())
+							.setColor('#c4150f')
+							.setTimestamp()
+							.setImage(embed.image)
+							.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
+	
+							message.channel.send(tempMsg)
+						}
+
 						return
 					} else {
 						mFiles.forEach(async (a) => {
