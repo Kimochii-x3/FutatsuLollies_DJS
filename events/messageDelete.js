@@ -32,7 +32,7 @@ module.exports = async (bot, message) => {
 									.setAuthor(message.author.tag, message.author.displayAvatarURL())
 									.setColor('#c4150f')
 									.setTimestamp()
-									.setImage(embed.image.proxyURL)
+									.setImage(embed.image.proxyURL || "")
 									.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 
 								logCHNL.send({ embeds: [tempMsg] }).catch(bot.errHandle)
