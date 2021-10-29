@@ -27,10 +27,10 @@ module.exports = async (bot, message) => {
 							.setAuthor(message.author.tag, message.author.displayAvatarURL())
 							.setColor('#c4150f')
 							.setTimestamp()
-							.setImage(embed.image)
+							.setImage(embed.image.url)
 							.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 	
-							message.channel.send({embeds: [tempMsg]})
+							logCHNL.send({embeds: [tempMsg]})
 						}
 
 						return
