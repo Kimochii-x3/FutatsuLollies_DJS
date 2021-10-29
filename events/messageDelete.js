@@ -24,7 +24,7 @@ module.exports = async (bot, message) => {
 							.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 						logCHNL.send({ embeds: [mDelete] });
 
-						if (message.embeds.length > 0 && message.embeds.some(e => e.image.url !== null || e.video.url !== null)) {
+						if (message.embeds.length > 0 && message.embeds.some(e => e.image !== null || e.video !== null)) {
 							let embeds = message.embeds; 
 
 							for (const embed of embeds) {
