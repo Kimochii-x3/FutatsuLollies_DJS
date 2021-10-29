@@ -1,5 +1,11 @@
 const { MessageEmbed, Message } = require('discord.js');
 
+/**
+ * 
+ * @param {*} bot 
+ * @param {Message} message 
+ * @returns 
+ */
 module.exports = async (bot, message) => {
 	if (!message.author.bot || message.channel.type !== 'dm') {
 		const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [message.guild.id]).catch(bot.errHandle);
@@ -26,7 +32,7 @@ module.exports = async (bot, message) => {
 									.setAuthor(message.author.tag, message.author.displayAvatarURL())
 									.setColor('#c4150f')
 									.setTimestamp()
-									.setImage(embed.image.url)
+									.setImage(embed.image.proxyURL)
 									.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 
 								logCHNL.send({ embeds: [tempMsg] }).catch(bot.errHandle)
