@@ -21,6 +21,8 @@ module.exports = async (bot, message) => {
 						logCHNL.send({embeds: [mDelete]});
 
 						for (const embed of embeds) {
+							bot.errHandle("got embed")
+
 							let tempMsg = new MessageEmbed()
 							.setAuthor(message.author.tag, message.author.displayAvatarURL())
 							.setColor('#c4150f')
@@ -28,7 +30,7 @@ module.exports = async (bot, message) => {
 							.setImage(embed.image)
 							.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 	
-							message.channel.send(tempMsg)
+							message.channel.send({embeds: [tempMsg]})
 						}
 
 						return
