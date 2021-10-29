@@ -24,15 +24,15 @@ module.exports = async (bot, message) => {
 							.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 						logCHNL.send({ embeds: [mDelete] });
 
-						if (message.embeds.length > 0) {
-							let embeds = message.embeds;
+						if (message.embeds.length > 0 && message.embeds.some(e => e.image.url !== null || e.video.url !== null)) {
+							let embeds = message.embeds; 
 
 							for (const embed of embeds) {
 								let tempMsg = new MessageEmbed()
 									.setAuthor(message.author.tag, message.author.displayAvatarURL())
 									.setColor('#c4150f')
 									.setTimestamp()
-									.setImage(embed.image.proxyURL || "")
+									.setImage(embed.image.url ?? embed.video.url ?? "https://www.vhv.rs/dpng/d/416-4167052_cross-sign-png-tic-tac-toe-cross-transparent.png")
 									.setFooter(`Author ID: ${message.author.id} & Message ID: ${message.id}`);
 
 								logCHNL.send({ embeds: [tempMsg] }).catch(bot.errHandle)
