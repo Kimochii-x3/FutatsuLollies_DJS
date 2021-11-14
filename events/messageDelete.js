@@ -6,14 +6,14 @@ const { MessageEmbed, Message } = require('discord.js');
  * @param {Message} message 
  * @returns 
  */
-module.exports = async (bot, message) => {
-	if (!message.author.bot || message.channel.type !== 'dm') {
-		const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [message.guild.id]).catch(bot.errHandle);
+module.exports = async (bot, msg) => {
+	if (!msg.author.bot || msg.channel.type !== 'dm') {
+		const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [msg.guild.id]).catch(bot.errHandle);
 		if (rows != undefined) {
-			const botPerms = message.guild.me.permissions.has(['SEND_MESSAGES', 'EMBED_LINKS'], { checkAdmin: true });
-			const logCHNL = message.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
+			const botPerms = msg.guild.me.permissions.has(['SEND_msgS', 'EMBED_LINKS'], { checkAdmin: true });
+			const logCHNL = msg.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
 			if (botPerms) {
-				let message = await message.fetch();
+				let message = await msg.fetch();
 				if (rows[0].serverLog === 'Y' && logCHNL) {
 					const mFiles = message.attachments.map(a => a.proxyURL);
 					if (mFiles.length === 0) {
