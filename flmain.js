@@ -254,12 +254,12 @@ bot.login(token);
 // when a channel is created                                                               \
 // bot.on('channelCreate', async (channel, errorLogs) => {});                               \
 // when a channel is updated                                                                 \___ to be implemented at some point
-// bot.on('channelUpdate', async (oldChannel, newChannel, errorLogs) => {});                 /
-// when a channel is deleted                                                                /
-// bot.on('channelDelete', async (channel, errorLogs) => {});                              /
-// when a role is created                                                                 /
-// bot.on('roleCreate', async (role, errorLogs) => {});                                  /
-// when a role is updated                                                               /
-// bot.on('roleUpdate', async (oldRole, newRole, errorLogs) => {});                    /
-// when a role is deleted                                                             /
-// bot.on('roleDelete', async (role, erroLogs) => {}); ______________________________/
+// bot.on('channelUpdate', async (oldChannel, newChannel, errorLogs) => {});                 |
+// when a channel is deleted                                                                |
+// bot.on('channelDelete', async (channel, errorLogs) => {});                              |
+// when a role is created                                                                 |
+// bot.on('roleCreate', async (role, errorLogs) => {});                                  |
+// when a role is updated                                                               |
+// bot.on('roleUpdate', async (oldRole, newRole, errorLogs) => {});                    |
+// when a role is deleted                                                             |
+// bot.on('roleDelete', async (role, erroLogs) => {}); ______________________________|
