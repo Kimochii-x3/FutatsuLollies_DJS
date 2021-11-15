@@ -13,7 +13,7 @@ module.exports = async (bot, msg) => {
 			const botPerms = msg.guild.me.permissions.has(['SEND_msgS', 'EMBED_LINKS'], { checkAdmin: true });
 			const logCHNL = msg.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
 			if (botPerms) {
-				let message = await msg.fetch();
+				let message = msg;
 				if (rows[0].serverLog === 'Y' && logCHNL) {
 					const mFiles = message.attachments.map(a => a.proxyURL);
 					if (mFiles.length === 0) {
