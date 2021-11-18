@@ -3,14 +3,14 @@ const { MessageEmbed, Message } = require('discord.js');
 /**
  * 
  * @param {*} bot 
- * @param {Message} message 
+ * @param {Message} msg 
  * @returns 
  */
 module.exports = async (bot, msg) => {
 	if (!msg.author.bot || msg.channel.type !== 'dm') {
 		const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [msg.guild.id]).catch(bot.errHandle);
-		if (rows != undefined) {
-			const botPerms = msg.guild.me.permissions.has(['SEND_msgS', 'EMBED_LINKS'], { checkAdmin: true });
+		if (rows != undefined) {s
+			const botPerms = msg.guild.me.permissions.has(['SEND_MESSAGES', 'EMBED_LINKS'], { checkAdmin: true });
 			const logCHNL = msg.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
 			if (botPerms) {
 				let message = msg;
