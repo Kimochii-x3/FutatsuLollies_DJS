@@ -9,7 +9,7 @@ const { MessageEmbed, Message } = require('discord.js');
 module.exports = async (bot, msg) => {
 	if (!msg.author.bot || msg.channel.type !== 'dm') {
 		const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [msg.guild.id]).catch(bot.errHandle);
-		if (rows != undefined) {s
+		if (rows != undefined) {
 			const botPerms = msg.guild.me.permissions.has(['SEND_MESSAGES', 'EMBED_LINKS'], { checkAdmin: true });
 			const logCHNL = msg.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
 			if (botPerms) {
