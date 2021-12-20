@@ -11,7 +11,7 @@ module.exports = async (bot, member) => {
     if (rows != undefined) {
         const botPerms = member.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true });
         const logCHNL = member.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
-        logCHNL.send("User left")
+        console.log("User left")
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
                 const userRole = member.guild.roles.cache.find(role => role.name === `USER-${member.id}`);
