@@ -7,7 +7,7 @@ const Discord = require('discord.js');
  * @returns 
  */
 module.exports = async (bot, ban) => {
-    const rows = await bot.db.query('select * from serverInfo where serverID = ?', [guild.id]).catch(bot.errHandle);
+    const rows = await bot.db.query('select * from serverInfo where serverID = ?', [ban.guild.id]).catch(bot.errHandle);
     if (rows != undefined) {
         const botPerms = ban.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true, checkOwner: false });
         const logCHNL = ban.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
