@@ -13,7 +13,7 @@ module.exports = async (bot, member) => {
         const logCHNL = member.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
-                const tempTimestamp = Date.now();
+                logCHNL.send("User left")
                 const aLogFound = await member.guild.fetchAuditLogs({ type: 'MEMBER_KICK', limit: 1 }).then(aLog => aLog.entries.first()).catch(bot.errHandle);
                 if (!aLogFound || aLogFound.target.id !== member.id) {
                     const embedLeave = new MessageEmbed()
