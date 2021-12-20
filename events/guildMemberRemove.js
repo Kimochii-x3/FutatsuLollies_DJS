@@ -15,7 +15,7 @@ module.exports = async (bot, member) => {
             if (rows[0].serverLog === 'Y' && logCHNL) {
                 const tempTimestamp = Date.now();
                 const aLogFound = await member.guild.fetchAuditLogs({ type: 'MEMBER_KICK', limit: 1 }).then(aLog => aLog.entries.first()).catch(bot.errHandle);
-                if (aLogFound.target.id !== member.id) {
+                if (!aLogFound || aLogFound.target.id !== member.id) {
                     const embedLeave = new MessageEmbed()
                         .setAuthor('User leave')
                         .setDescription(`Username: **${member.user.tag}**`)
