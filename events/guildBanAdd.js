@@ -17,11 +17,11 @@ module.exports = async (bot, ban) => {
 
                 if (!aLogFound) return logCHNL.send(`User ${ban.user.id} was banned, but there was no audit log present.`);
 
-                const {target, executor} = aLogFound;
+                const {target, executor, reason} = aLogFound;
 
-                const embedBan = new MessageEmbed()
-                    .setAuthor('User kicked')
-                    .setDescription(`Moderator: <@${executor}>\n Member: **${target}**`)
+                const embedBan = new Discord.MessageEmbed()
+                    .setAuthor('User banned')
+                    .setDescription(`Moderator: <@${executor}>\n Member: **${target}**\n Reason: ${reason}`)
                     .setColor('#c4150f')
                     .setTimestamp();
 
