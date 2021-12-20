@@ -21,7 +21,7 @@ module.exports = async (bot, ban) => {
 
                 const embedBan = new Discord.MessageEmbed()
                     .setAuthor('User banned')
-                    .setDescription(`Moderator: ${executor}\n Member: ${target} (${target.username} - ${target.id})\n ${reason ? `Reason: ${reason}` : ""}`)
+                    .setDescription(`Moderator: ${executor}\n Member: ${target} (${target.username}#${target.discriminator} - ${target.id})\n ${reason ? `Reason: ${reason}` : ""}`)
                     .setColor('#c4150f')
                     .setTimestamp();
 
