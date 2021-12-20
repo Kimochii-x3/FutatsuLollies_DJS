@@ -1,13 +1,31 @@
 const Discord = require('discord.js');
 
-module.exports = async (bot, guild, user) => {
+/**
+ * 
+ * @param bot 
+ * @param {Discord.GuildBan} ban 
+ * @returns 
+ */
+module.exports = async (bot, ban) => {
     const rows = await bot.db.query('select * from serverInfo where serverID = ?', [guild.id]).catch(bot.errHandle);
     if (rows != undefined) {
-        const botPerms = guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true, checkOwner: false });
-        const logCHNL = guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
+        const botPerms = ban.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true, checkOwner: false });
+        const logCHNL = ban.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
-                
+                const aLogFound = await ban.guild.fetchAuditLogs({ type: 'MEMBER_KICK', limit: 1 }).then(aLog => aLog.entries.first()).catch(bot.errHandle);
+
+                if (!aLogFound) return logCHNL.send(`User ${ban.user.id} was banned, but there was no audit log present.`);
+
+                const {target, executor} = aLogFound;
+
+                const embedBan = new MessageEmbed()
+                    .setAuthor('User kicked')
+                    .setDescription(`Moderator: <@${executor}>\n Member: **${target}**`)
+                    .setColor('#c4150f')
+                    .setTimestamp();
+
+                return logCHNL.send({ embeds: [embedBan] }).catch(bot.errHandle);
             }
         }
     } else { return bot.errL.send('Issue occured trying to log member banning in a server, should it occur commonly check code').catch(bot.errHandle); }
