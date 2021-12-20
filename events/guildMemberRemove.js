@@ -9,9 +9,9 @@ const { MessageEmbed, GuildMember } = require('discord.js');
 module.exports = async (bot, member) => {
     const rows = await bot.db.query('SELECT * FROM serverInfo WHERE serverID = ?', [member.guild.id]).catch(bot.errHandle);
     if (rows != undefined) {
+        console.log("User left")
         const botPerms = member.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true });
         const logCHNL = member.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
-        console.log("User left")
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
                 const userRole = member.guild.roles.cache.find(role => role.name === `USER-${member.id}`);
