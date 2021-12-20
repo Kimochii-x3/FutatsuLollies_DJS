@@ -11,10 +11,10 @@ module.exports = async (bot, member) => {
     if (rows != undefined) {
         const botPerms = member.guild.me.permissions.has(['SEND_MESSAGES', 'VIEW_AUDIT_LOG', 'EMBED_LINKS'], { checkAdmin: true });
         const logCHNL = member.guild.channels.cache.find(chnl => chnl.id === rows[0].serverClogID);
+        logCHNL.send("User left")
         if (botPerms) {
             if (rows[0].serverLog === 'Y' && logCHNL) {
                 const userRole = member.guild.roles.cache.find(role => role.name === `USER-${member.id}`);
-                logCHNL.send("User left")
                 const aLogFound = await member.guild.fetchAuditLogs({ type: 'MEMBER_KICK', limit: 1 }).then(aLog => aLog.entries.first()).catch(bot.errHandle);
                 logCHNL.send(aLogFound);
                 if (!aLogFound || aLogFound.target.id !== member.id) {
