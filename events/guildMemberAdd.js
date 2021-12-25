@@ -12,7 +12,7 @@ module.exports = async (bot, member) => {
 				.setDescription(`Username: **${member.user.tag}**\n ID: **${member.user.id}**`)
 				.setColor('GREEN')
 				.setTimestamp();  
-				return logCHNL.send({embeds: [embed]}).cathc(bot.errHandle);
+				return logCHNL.send({embeds: [embed]}).catch(bot.errHandle);
 			}
 		}
     } else { return bot.errL.send('Issue occured trying to log member joining in a server, should it occur commonly check code').catch(bot.errHandle); }
