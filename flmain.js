@@ -2,13 +2,22 @@ const { Client, Intents, Partials, MessageEmbed, Collection, Options } = require
 const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
-const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
+const { token, verifiedToken, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
+let botIntents;
+let botPartials;
+if (token == verifiedToken) {
+    botIntents = ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"];
+    botPartials = ["GUILD_MEMBER"];
+} else {
+    botIntents = ["GUILDS", "GUILD_BANS", "GUILD_MEMBERS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"];
+    botPartials = ["GUILD_MEMBER"];
+}
 const bot = new Client({
     messageCacheMaxSize: 300,
-    intents: ["GUILDS", "GUILD_BANS", "GUILD_MEMBERS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"],
-    partials: ["GUILD_MEMBER"] 
+    intents: botIntents,
+    partials: botPartials 
     /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
-}) // creating the bot with non-default message settings
+}); // creating the bot with non-default message settings
 const commands = new Collection(); // creating the command collection
 const cd = new Set(); // creating the set for command cooldowns
 const cmdFiles = fs.readdirSync(__dirname + '/cmd').filter(file => file.endsWith('.js')); // reading the command files in async
