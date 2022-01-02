@@ -5,8 +5,8 @@ const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
 const bot = new Client({
     messageCacheMaxSize: 300,
-    intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"],
-    partials: [] 
+    intents: ["GUILDS", "GUILD_BANS", "GUILD_MEMBERS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"],
+    partials: ["GUILD_MEMBER"] 
     /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
 }) // creating the bot with non-default message settings
 const commands = new Collection(); // creating the command collection
