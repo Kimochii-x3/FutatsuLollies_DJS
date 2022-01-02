@@ -1,14 +1,19 @@
-const { Client, Intents, MessageEmbed, Collection, Options } = require('discord.js'); // Library used to write the bot code
+const Discord = require('discord.js'); // Library used to write the bot code
 const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
 const { token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
+<<<<<<< HEAD
+const bot = new Discord.Client({ messageCacheMaxSize: 300 /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/}) // creating the bot with non-default message settings
+const commands = new Discord.Collection(); // creating the command collection
+=======
 const bot = new Client({
     messageCacheMaxSize: 300,
-    intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"] 
+    intents: ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"] 
     /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
 }) // creating the bot with non-default message settings
 const commands = new Collection(); // creating the command collection
+>>>>>>> d6154c6 (fixes)
 const cd = new Set(); // creating the set for command cooldowns
 const cmdFiles = fs.readdirSync(__dirname + '/cmd').filter(file => file.endsWith('.js')); // reading the command files in async
 bot.cachingData = {}; // used to cache currently only prefixes for the servers /-/ structurized: { guildID: [prefix] }
@@ -38,8 +43,8 @@ let dbDesc;
         port: hydrabolt,
         database: uwu,
     }).catch(error => {
-       dbDesc = 'Database error - not connected';
-       console.log(error);
+        dbDesc = 'Database error - not connected';
+        console.log(error);
     });
     dbDesc = "Database connected";
     console.log("Database connected");
@@ -48,32 +53,25 @@ let dbDesc;
 bot.once('ready', async () => {
     // sets the bot owner & some channels
     console.log(process.version);
-    bot.owner = await bot.users.fetch('254349985963835393');
-    bot.maintainer = await bot.users.fetch('528229753258246145');
-    bot.rAU = await bot.channels.fetch('622467121175199745');
-    bot.errL = await bot.channels.fetch('780537355144134686');
-    bot.evrL = await bot.channels.fetch('780545286837370901');
-    bot.gJL = await bot.channels.fetch('727205516048203787');
+    bot.owner = bot.users.cache.get('254349985963835393');
+    bot.rAU = bot.channels.cache.get('622467121175199745');
+    bot.errL = bot.channels.cache.get('780537355144134686');
+    bot.evrL = bot.channels.cache.get('780545286837370901');
+    bot.gJL = bot.channels.cache.get('727205516048203787');
     // fetches the MOTD from the database and sets it as the bot's status
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
-    try {
-        if (status && status[0].motd != null) {
-            bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING' });
-        } else {
-            bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' });
-        }
-    } catch (err) {
-        //console.error(err)
-        bot.errHandle(err);
+    if (status && status[0].motd.length > 1) {
+        await bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING'}).catch(bot.errHandle);
+    } else {
+        await bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' }).catch(bot.errHandle);
     }
     // maps the guilds by their ID, then checks if they exist in the database, adds them if they dont
     const gIDs = bot.guilds.cache.map(g => g.id);
     for (const g of gIDs) {
         const gInDB = await bot.db.query('select * from serverInfo where serverID = ?', [g]).catch(bot.errHandle);
         if (!gInDB[0]) {
-            await bot.db.query('insert into serverInfo (serverID) values (?)', [g]).then(() => {
-                bot.evrL.send(`Added ${g} to database as it was missing`);
-            }).catch(bot.errHandle);
+            await bot.db.query('insert into serverInfo (serverID) values (?)', [g]).then(()=> {
+            bot.evrL.send(`Added ${g} to database as it was missing`); }).catch(bot.errHandle);
         }
         // if (gInDB[0] && gInDB[0].serverID.length < 1) {
         //     await bot.db.query('insert into serverInfo (serverID) values (?)', [g]).then(()=> {
@@ -85,11 +83,11 @@ bot.once('ready', async () => {
         // }
     }
     // logging startup/restarts/reconnects and uptime
-    const botStartup = new MessageEmbed()
-        .setTitle(new Date().toLocaleString('en-GB'))
-        .setColor('#63ff48')
-        .setDescription(dbDesc)
-    bot.rAU.send({embeds: [botStartup]}).catch(bot.errHandle);
+    const botStartup = new Discord.MessageEmbed()
+    .setTitle(new Date().toLocaleString('en-GB'))
+    .setColor('#63ff48')
+    .setDescription(dbDesc)
+    bot.rAU.send(botStartup).catch(bot.errHandle);
     // saving prefixes to the cache rather than constantly fetching them
     // const guildCaching = bot.guilds.cache.map(g => g.id);
     // for (const g of guildCaching) {
@@ -102,12 +100,12 @@ bot.once('ready', async () => {
     for (i = 0; i < dbData.length; i++) {
         // console.log(dbData[i].serverID);
         bot.cachingData[dbData[i].serverID] = [dbData[i].prefix, dbData[i].serverLog];
-        if (bot.cachingData[dbData[i].serverID] == '683496948883390475') {
+        if (bot.cachingData[dbData[i].serverID] == 683496948883390475) {
             console.log(bot.cachingData[dbData[i].serverID]);
         }
     };
     // interval to check if a user hasnt been unmuted when they should be unmuted due to the bot restarting, reconnecting or whatever other issue
-    setInterval(async () => {
+    setInterval(async() => {
         const rows = await bot.db.query('select * from serverMutes where timeUnmute < ?', [Date.now()]).catch(bot.errHandle);
         if (rows) { //node v14 optional chaining rows?[0]?.timeUnmute - keep it in mind
             for (const r of rows) {
@@ -128,13 +126,12 @@ bot.once('ready', async () => {
 });
 // error logging
 bot.errHandle = errMain => {
-    //console.trace(errMain)
     bot.errL.send(errMain.toString()).catch(errCatched => console.error(`${Date.toLocaleString('en-GB')}\nOriginal error:\n${errMain}\nFailed to send err msg due to ${errCatched}`));
 }
 // logs erros, used for debugging
 bot.on('error', bot.errHandle);
 // message related things
-bot.on('messageCreate', async message => {
+bot.on('message', async message => {
     // checks if the channel the message was sent in is DM one, if it is it closes the DM channel or if its a bot to ignore it
     if (message.channel.type !== 'dm' && !message.author.bot) {
         // checks if the message includes 'prefix' then checks if the bot is mentioned in the message and it returns the prefix for the server the message was sent in
@@ -147,13 +144,13 @@ bot.on('messageCreate', async message => {
                         message.channel.send(`my prefix for this server is: \`${rows[0].prefix}\``);
                     }
                 } else {
-                    message.channel.send(`my prefix for this server is: \`${bot.cachingData[message.guild.id][0]}\``);
+                   message.channel.send(`my prefix for this server is: \`${bot.cachingData[message.guild.id][0]}\``);
                 }
             }
         } else {
             // gets the prefix from database for the server, gets the args and options after which checks if the message starts with command name (and if args are required or not) then executes it
             // on error logs the error in errorlog channel and replies if error occured
-            if (!bot.cachingData[message.guild.id]) { return console.log(bot.cachingData[message.guild.id] + ' problem here ' + message.guild.id + ' ' + message.guild.name); }
+            if (!bot.cachingData[message.guild.id]) { return console.log(bot.cachingData[message.guild.id] + ' problem here ' + message.guild.id +' '+ message.guild.name); }
             if (!bot.cachingData[message.guild.id][0]) {
                 const rows = await bot.db.query('select * from serverInfo where serverID = ?', [message.guild.id]).catch(bot.errHandle);
                 if (rows) {
@@ -162,14 +159,12 @@ bot.on('messageCreate', async message => {
                     await message.channel.send('Issue occured whilst working with database, this has been logged, please wait a bit before repeating the command/message').catch(bot.errHandle);
                     return await bot.evrL.send(`Issue occured whilst acquiring \`rows\` from the database\nServer ID: ${message.guild.id}\nOwner ID: ${message.guild.owner.id}\nChannel ID: ${message.channel.id}\nChannel Type: ${message.channel.type}\nAuthor ID: ${message.author.id}\nAuthor Tag: ${message.author.tag}`).catch(bot.errHandle);
                 }
-            }
+            }   
             const prefix = bot.cachingData[message.guild.id][0];
             if (!message.content.toLowerCase().startsWith(prefix)) { return; }
             const args = message.content.slice(prefix.length).split(/ +/);
             const cmdName = args.shift().toLowerCase();
-            const option0 = message.content.slice(prefix.length + cmdName.length).split(/-+/);
-            const option = option0.map(entry => entry.trim());
-            // await option.map(entry => {return entry.trim()});
+            const option = message.content.slice(prefix.length + cmdName.length).split(/-+/);
             if (!commands.has(cmdName)) { return; }
             const cmd = commands.get(cmdName);
             try {
@@ -181,7 +176,8 @@ bot.on('messageCreate', async message => {
                     await message.channel.send('No args provided');
                 } else {
                     cmd.execute(bot, message, args, option, commands, prefix);
-                    if (!message.member.permissions.has('ADMINISTRATOR') && cmd.cd) {
+                    if (!message.member.hasPermission('ADMINISTRATOR') && cmd.cd)
+                    {
                         if (cmd.cd !== 0) {
                             cd.add(`${message.author.id} + ${message.guild.id}`);
                             setTimeout(() => {
@@ -208,14 +204,12 @@ bot.on('guildCreate', async guild => {
     const rows = await bot.db.query('select * from serverInfo where serverID = ?', [guild.id]).catch(bot.errHandle);
     if (rows && rows[0]) {
         if (rows[0].serverID == guild.id) { return; } else {
-            await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(() => {
-                bot.evrL.send(`Added ${guild.id} to database, serverID != to guild.id, this is a extremely rare occasion, if it happens constantly check the code`).catch(bot.errHandle);
-            }).catch(bot.errHandle);
+            await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(()=> {
+            bot.evrL.send(`Added ${guild.id} to database, serverID != to guild.id, this is a extremely rare occasion, if it happens constantly check the code`).catch(bot.errHandle); }).catch(bot.errHandle);
         }
     } else {
-        await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(() => {
-            bot.evrL.send(`Added ${guild.id} to database`).catch(bot.errHandle);
-        }).catch(bot.errHandle);
+        await bot.db.query('insert into serverInfo (serverID) values (?)', [guild.id]).then(()=> {
+        bot.evrL.send(`Added ${guild.id} to database`).catch(bot.errHandle); }).catch(bot.errHandle);
     }
 });
 // the bot token that it logs in with
@@ -254,12 +248,12 @@ bot.login(token);
 // when a channel is created                                                               \
 // bot.on('channelCreate', async (channel, errorLogs) => {});                               \
 // when a channel is updated                                                                 \___ to be implemented at some point
-// bot.on('channelUpdate', async (oldChannel, newChannel, errorLogs) => {});                 |
-// when a channel is deleted                                                                |
-// bot.on('channelDelete', async (channel, errorLogs) => {});                              |
-// when a role is created                                                                 |
-// bot.on('roleCreate', async (role, errorLogs) => {});                                  |
-// when a role is updated                                                               |
-// bot.on('roleUpdate', async (oldRole, newRole, errorLogs) => {});                    |
-// when a role is deleted                                                             |
-// bot.on('roleDelete', async (role, erroLogs) => {}); ______________________________|
+// bot.on('channelUpdate', async (oldChannel, newChannel, errorLogs) => {});                 /
+// when a channel is deleted                                                                /
+// bot.on('channelDelete', async (channel, errorLogs) => {});                              /
+// when a role is created                                                                 /
+// bot.on('roleCreate', async (role, errorLogs) => {});                                  /
+// when a role is updated                                                               /
+// bot.on('roleUpdate', async (oldRole, newRole, errorLogs) => {});                    /
+// when a role is deleted                                                             /
+// bot.on('roleDelete', async (role, erroLogs) => {}); ______________________________/
