@@ -68,9 +68,9 @@ bot.once('ready', async () => {
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
     try {
         if (status && status[0].motd != null) {
-            bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help/MOTD: ${status[0].motd}`, { type: 'WATCHING' });
+            bot.user.setActivity(`${status[0].motd}`, {name: 'MOTD', type: 'WATCHING'});
         } else {
-            bot.user.setActivity(`${bot.guilds.cache.size} servers/fl.help`, { type: 'WATCHING' });
+            bot.user.setActivity(`yes`, {name: 'MOTD', type: 'WATCHING'});
         }
     } catch (err) {
         //console.error(err)
