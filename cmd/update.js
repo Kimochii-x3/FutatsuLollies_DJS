@@ -76,7 +76,7 @@ module.exports = {
                             .setTitle('Output')
                             .setDescription(`\`\`\`CSS\n${output}\`\`\``);
                             botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
-                            await new Promise(wait => setTimeout(wait, 2000));
+                            await new Promise(wait => setTimeout(wait, 5000));
                             await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Restarting in a second').setDescription('')]}).catch(bot.errHandle);
                             await new Promise(wait => setTimeout(wait, 1000));
                             return require("child_process").execSync("pm2 restart FutatsuLollies");
