@@ -31,11 +31,6 @@ module.exports = {
                 .setLabel('Download Code')
                 .setStyle('SUCCESS')
                 .setDisabled(false),
-                new MessageButton()
-                .setCustomId('uploadCode')
-                .setLabel('Upload Code')
-                .setStyle('DANGER')
-                .setDisabled(false),
             )
             const filter = (interaction) => (interaction.user.id === bot.owner.id || interaction.user.id === bot.maintainer.id);
 
