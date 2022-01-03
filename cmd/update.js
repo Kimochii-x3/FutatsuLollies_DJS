@@ -31,6 +31,11 @@ module.exports = {
                 .setLabel('Download Code')
                 .setStyle('SUCCESS')
                 .setDisabled(false),
+                new MessageButton()
+                .setCustomId('cancelInteraction')
+                .setLabel('Cancel action')
+                .setStyle('DANGER')
+                .setDisabled(false),
             )
             const filter = (interaction) => (interaction.user.id === bot.owner.id || interaction.user.id === bot.maintainer.id);
 
@@ -86,6 +91,9 @@ module.exports = {
                             .setDescription(`\`\`\`JS\n${err}\`\`\``);
                             botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
                         }
+                    } else if (interaction.customId === updateButtons.components[3].customId) {
+                        await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Interaction cancelled.')], components: []}).catch(bot.errHandle);
+                        interaction.deferUpdate();
                     }
                 }).catch(bot.errHandle);
             }
