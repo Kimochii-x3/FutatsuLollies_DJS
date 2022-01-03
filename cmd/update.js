@@ -27,10 +27,15 @@ module.exports = {
                 .setStyle('PRIMARY')
                 .setDisabled(false),
                 new MessageButton()
-                .setCustomId('updateCode')
-                .setLabel('Update Code')
-                .setStyle('PRIMARY')
-                .setDisabled(false)
+                .setCustomId('downloadCode')
+                .setLabel('Download Code')
+                .setStyle('SUCCESS')
+                .setDisabled(false),
+                new MessageButton()
+                .setCustomId('uploadCode')
+                .setLabel('Upload Code')
+                .setStyle('DANGER')
+                .setDisabled(false),
             )
             const filter = (interaction) => (interaction.user.id === bot.owner.id || interaction.user.id === bot.maintainer.id);
 
@@ -69,23 +74,23 @@ module.exports = {
                         await interaction.deferUpdate();
                         await botMsg.edit({embeds: [latestEmbed]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
                     } else if (interaction.customId === updateButtons.components[2].customId) {
+                        await interaction.deferUpdate();
                         try {
-                        let output = require("child_process").execSync("git pull").toString();
-                        const latestEmbed = new MessageEmbed(botMsg.embeds[0])
-                        .setTitle('Output')
-                        .setDescription(`\`\`\`CSS\n${output}\`\`\``);
-                        botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
-                        await new Promise(wait => setTimeout(wait, 2000));
-                        await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Restarting in a second').setDescription('')]}).catch(bot.errHandle);
-                        await new Promise(wait => setTimeout(wait, 1000));
-                        return require("child_process").execSync("pm2 restart FutatsuLollies");
+                            let output = require("child_process").execSync("git pull").toString();
+                            const latestEmbed = new MessageEmbed(botMsg.embeds[0])
+                            .setTitle('Output')
+                            .setDescription(`\`\`\`CSS\n${output}\`\`\``);
+                            botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
+                            await new Promise(wait => setTimeout(wait, 2000));
+                            await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Restarting in a second').setDescription('')]}).catch(bot.errHandle);
+                            await new Promise(wait => setTimeout(wait, 1000));
+                            return require("child_process").execSync("pm2 restart FutatsuLollies");
                         } catch (err) {
                             const latestEmbed = new MessageEmbed(botMsg.embeds[0])
                             .setTitle('Error')
                             .setDescription(`\`\`\`JS\n${err}\`\`\``);
                             botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
                         }
-                        interaction.deferUpdate();
                     }
                 }).catch(bot.errHandle);
             }
