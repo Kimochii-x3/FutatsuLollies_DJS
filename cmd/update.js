@@ -112,14 +112,14 @@ module.exports = {
                                         collector.stop();
                                     } else {
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Comment accepted!')]}).catch(bot.errHandle);
-                                        await new Promise(wait => setTimeout(wait, 2000));
                                         let commit = require("child_process").execSync(`git commit -am "${msg.content}"`).toString();
+                                        await new Promise(wait => setTimeout(wait, 4000));
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code commited!').spliceFields(0, 0, [{name: 'Output - Commit', value: `\`\`\`CSS\n${commit}\`\`\``, inline: false}])]}).catch(bot.errHandle);
-                                        await new Promise(wait => setTimeout(wait, 3000));
                                         let uploadCode = require("child_process").execSync("git push https://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@github.com/Kimochii-x3/FutatsuLollies_DJS.git --force").toString();
+                                        await new Promise(wait => setTimeout(wait, 4000));
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code uploaded!').spliceFields(0, 1, [{name: 'Output - Upload', value: `\`\`\`CSS\n${uploadCode}\`\`\``, inline: false}])]}).catch(bot.errHandle);
                                         await new Promise(wait => setTimeout(wait, 4000));
-                                        collector.stop();
+                                        await collector.stop();
                                     }
                                 });
                                 collector.on('end', async collected => {
@@ -135,7 +135,6 @@ module.exports = {
                             }
                         }
                     } else if (interaction.customId === updateButtons.components[3].customId) {
-                        console.log(interaction);
                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Interaction cancelled.')], components: []}).catch(bot.errHandle);
                         await interaction.deferUpdate();
                     }
