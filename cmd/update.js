@@ -118,13 +118,14 @@ module.exports = {
                                         await new Promise(wait => setTimeout(wait, 3000));
                                         let uploadCode = require("child_process").execSync("upcode").toString();
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code uploaded!').spliceFields(0, 1, [{name: 'Output - Upload', value: `\`\`\`CSS\n${uploadCode}\`\`\``, inline: false}])]}).catch(bot.errHandle);
+                                        await new Promise(wait => setTimeout(wait, 4000));
                                         collector.stop();
                                     }
                                 });
                                 collector.on('end', async collected => {
                                     setTimeout(async () => {
                                         return botMsg.edit({embeds: [updateEmbed], components: [updateButtons]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
-                                    }, 4000);
+                                    }, 1000);
                                 });
                             } catch (err) {
                                 const latestEmbed = new MessageEmbed(botMsg.embeds[0])
