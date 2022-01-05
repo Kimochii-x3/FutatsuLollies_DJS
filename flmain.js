@@ -2,7 +2,7 @@ const { Client, Intents, Partials, MessageEmbed, Collection, Options } = require
 const ms = require('ms'); // ms npm package used for time
 const fs = require('fs'); // used to read the command & event files as well as any additional files
 const mysql = require('promise-mysql'); // using promise-mysql for database
-const { token, verifiedToken, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
+const { token, verifiedToken, git_token, pls_fuck, me_hard, daddy, hydrabolt, uwu } = require('./botconf.json'); // requiring bot token, database credentials
 let botIntents;
 let botPartials;
 if (token == verifiedToken) {
@@ -67,6 +67,7 @@ bot.once('ready', async () => {
     bot.errL = await bot.channels.fetch('780537355144134686');
     bot.evrL = await bot.channels.fetch('780545286837370901');
     bot.gJL = await bot.channels.fetch('727205516048203787');
+    bot.git_token = git_token;
     // fetches the MOTD from the database and sets it as the bot's status
     const status = await bot.db.query('select * from botStats').catch(bot.errHandle);
     try {
