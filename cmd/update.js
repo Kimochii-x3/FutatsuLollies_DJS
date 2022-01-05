@@ -115,7 +115,7 @@ module.exports = {
                                         await new Promise(wait => setTimeout(wait, 2000));
                                         let commit = require("child_process").execSync(`git commit -am "${msg.content}"`).toString();
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code commited!').spliceFields(0, 0, [{name: 'Output - Commit', value: `\`\`\`CSS\n${commit}\`\`\``, inline: false}])]}).catch(bot.errHandle);
-                                        await new Promise(wait => setTimeout(wait, 2000));
+                                        await new Promise(wait => setTimeout(wait, 3000));
                                         let uploadCode = require("child_process").execSync("upcode").toString();
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code uploaded!').spliceFields(0, 1, [{name: 'Output - Upload', value: `\`\`\`CSS\n${uploadCode}\`\`\``, inline: false}])]}).catch(bot.errHandle);
                                         collector.stop();
@@ -124,7 +124,7 @@ module.exports = {
                                 collector.on('end', async collected => {
                                     setTimeout(async () => {
                                         return botMsg.edit({embeds: [updateEmbed], components: [updateButtons]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
-                                    }, 1000);
+                                    }, 4000);
                                 });
                             } catch (err) {
                                 const latestEmbed = new MessageEmbed(botMsg.embeds[0])
