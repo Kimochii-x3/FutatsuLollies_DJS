@@ -99,7 +99,7 @@ module.exports = {
                                 .setDescription(`\`\`\`JS\n${err}\`\`\``);
                                 botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
                             }
-                        } else {
+                        } else {/*
                             try {
                                 const messageFilter = msg => (msg.author.id === bot.owner.id || msg.author.id === bot.maintainer.id) && (msg.content.length < 1025);
                                 const collector = interaction.channel.createMessageCollector({messageFilter, max: 1});
@@ -132,7 +132,7 @@ module.exports = {
                                 .setTitle('Error')
                                 .setDescription(`\`\`\`JS\n${err}\`\`\``);
                                 botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
-                            }
+                            }*/
                         }
                     } else if (interaction.customId === updateButtons.components[3].customId) {
                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Interaction cancelled.')], components: []}).catch(bot.errHandle);
