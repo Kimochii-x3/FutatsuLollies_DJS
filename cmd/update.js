@@ -113,7 +113,7 @@ module.exports = {
                                     } else {
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Comment accepted!')]}).catch(bot.errHandle);
                                         let commit = require("child_process").execSync(`git commit -am "${msg.content}"`).toString();
-                                        await new Promise(wait => setTimeout(wait, 4000));
+                                        await new Promise(wait => setTimeout(wait, 2000));
                                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code commited!').spliceFields(0, 0, [{name: 'Output - Commit', value: `\`\`\`CSS\n${commit}\`\`\``, inline: false}])]}).catch(bot.errHandle);
                                         let uploadCode = require("child_process").execSync(`git push https://${bot.git_token}@github.com/Kimochii-x3/FutatsuLollies_DJS.git --force`).toString();
                                         await new Promise(wait => setTimeout(wait, 4000));
@@ -125,7 +125,7 @@ module.exports = {
                                 collector.on('end', async collected => {
                                     setTimeout(async () => {
                                         return botMsg.edit({embeds: [updateEmbed], components: [updateButtons]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
-                                    }, 1000);
+                                    }, 14000);
                                 });
                             } catch (err) {
                                 const latestEmbed = new MessageEmbed(botMsg.embeds[0])
