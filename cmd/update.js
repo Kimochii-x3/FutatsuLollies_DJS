@@ -1,4 +1,4 @@
-const {MessageEmbed, MessageButton, MessageActionRow} = require('discord.js');
+const {MessageEmbed, MessageButton, MessageActionRow, Message} = require('discord.js');
 
 module.exports = {
     name: 'update',
@@ -27,9 +27,9 @@ module.exports = {
                 .setStyle('PRIMARY')
                 .setDisabled(false),
                 new MessageButton()
-                .setCustomId('downloadCode')
-                .setLabel('Download Code')
-                .setStyle('SUCCESS')
+                .setCustomId('code')
+                .setLabel('$')
+                .setStyle('SECONDARY')
                 .setDisabled(false),
                 new MessageButton()
                 .setCustomId('cancelInteraction')
@@ -38,7 +38,14 @@ module.exports = {
                 .setDisabled(false),
             )
             const filter = (interaction) => (interaction.user.id === bot.owner.id || interaction.user.id === bot.maintainer.id);
-
+            if (bot.code_type != bot.code_rels) {
+                updateButtons.components.forEach(entry => {
+                    if (entry.customId === updateButtons.components[2].customId) {
+                        entry.label = 'Upload Code';
+                        entry.style = 'DANGER';
+                    }
+                });
+            }
             message.channel.send({embeds: [updateEmbed], components: [updateButtons]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
             async function awaitInput(botMsg) {
                 await botMsg.awaitMessageComponent({filter}).then(async interaction => {
@@ -75,25 +82,61 @@ module.exports = {
                         await botMsg.edit({embeds: [latestEmbed]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
                     } else if (interaction.customId === updateButtons.components[2].customId) {
                         await interaction.deferUpdate();
-                        try {
-                            let output = require("child_process").execSync("git pull").toString();
-                            const latestEmbed = new MessageEmbed(botMsg.embeds[0])
-                            .setTitle('Output')
-                            .setDescription(`\`\`\`CSS\n${output}\`\`\``);
-                            botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
-                            await new Promise(wait => setTimeout(wait, 5000));
-                            await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Restarting in a second').setDescription('')]}).catch(bot.errHandle);
-                            await new Promise(wait => setTimeout(wait, 1000));
-                            return require("child_process").execSync("pm2 restart FutatsuLollies");
-                        } catch (err) {
-                            const latestEmbed = new MessageEmbed(botMsg.embeds[0])
-                            .setTitle('Error')
-                            .setDescription(`\`\`\`JS\n${err}\`\`\``);
-                            botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
+                        if (bot.code_type === bot.code_rels) {
+                            try {
+                                let output = require("child_process").execSync("git pull").toString();
+                                const latestEmbed = new MessageEmbed(botMsg.embeds[0])
+                                .setTitle('Output')
+                                .setDescription(`\`\`\`CSS\n${output}\`\`\``);
+                                botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
+                                await new Promise(wait => setTimeout(wait, 5000));
+                                await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Restarting in a second').setDescription('')]}).catch(bot.errHandle);
+                                await new Promise(wait => setTimeout(wait, 1000));
+                                return require("child_process").execSync("pm2 restart FutatsuLollies");
+                            } catch (err) {
+                                const latestEmbed = new MessageEmbed(botMsg.embeds[0])
+                                .setTitle('Error')
+                                .setDescription(`\`\`\`JS\n${err}\`\`\``);
+                                botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
+                            }
+                        } else {
+                            try {
+                                const messageFilter = msg => (msg.author.id === bot.owner.id || msg.author.id === bot.maintainer.id) && (msg.content.length < 1025);
+                                const collector = interaction.channel.createMessageCollector({messageFilter, max: 1});
+                                const latestEmbed = new MessageEmbed(botMsg.embeds[0])
+                                .setTitle('Write the comment for `git commit -am`, up to 1024(inclusive) characters, write q to cancel');
+                                await botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
+                                collector.on('collect', async msg => {
+                                    if (msg.content === 'q') {
+                                        botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Uploading cancelled.')]}).catch(bot.errHandle);
+                                        collector.stop();
+                                    } else {
+                                        await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Comment accepted!')]}).catch(bot.errHandle);
+                                        await new Promise(wait => setTimeout(wait, 2000));
+                                        let commit = require("child_process").execSync(`git commit -am "${msg.content}"`).toString();
+                                        await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code commited!').spliceFields(0, 0, [{name: 'Output - Commit', value: `\`\`\`CSS\n${commit}\`\`\``, inline: false}])]}).catch(bot.errHandle);
+                                        await new Promise(wait => setTimeout(wait, 2000));
+                                        let uploadCode = require("child_process").execSync("upcode").toString();
+                                        await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Code uploaded!').spliceFields(0, 1, [{name: 'Output - Upload', value: `\`\`\`CSS\n${uploadCode}\`\`\``, inline: false}])]}).catch(bot.errHandle);
+                                        collector.stop();
+                                    }
+                                });
+                                collector.on('end', async collected => {
+                                    setTimeout(async () => {
+                                        return botMsg.edit({embeds: [updateEmbed], components: [updateButtons]}).then(botMsg => awaitInput(botMsg)).catch(bot.errHandle);
+                                    }, 1000);
+                                });
+                            } catch (err) {
+                                const latestEmbed = new MessageEmbed(botMsg.embeds[0])
+                                .setTitle('Error')
+                                .setDescription(`\`\`\`JS\n${err}\`\`\``);
+                                botMsg.edit({embeds: [latestEmbed], components: []}).catch(bot.errHandle);
+                            }
                         }
                     } else if (interaction.customId === updateButtons.components[3].customId) {
+                        console.log(interaction);
                         await botMsg.edit({embeds: [botMsg.embeds[0].setTitle('Interaction cancelled.')], components: []}).catch(bot.errHandle);
-                        interaction.deferUpdate();
+                        await interaction.deferUpdate();
                     }
                 }).catch(bot.errHandle);
             }

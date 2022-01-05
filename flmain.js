@@ -7,7 +7,7 @@ let botIntents;
 let botPartials;
 if (token == verifiedToken) {
     botIntents = ["GUILDS", "GUILD_BANS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"];
-    botPartials = ["GUILD_MEMBER"];
+    botPartials = [];
 } else {
     botIntents = ["GUILDS", "GUILD_BANS", "GUILD_MEMBERS", "GUILD_EMOJIS_AND_STICKERS", "GUILD_INVITES", "GUILD_MESSAGES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"];
     botPartials = ["GUILD_MEMBER"];
@@ -18,6 +18,9 @@ const bot = new Client({
     partials: botPartials 
     /*, messageCacheLifetime: 7200, messageSweepInterval: 600*/
 }); // creating the bot with non-default message settings
+bot.code_rels = 'rels';
+bot.code_beta = 'beta';
+bot.code_type;
 const commands = new Collection(); // creating the command collection
 const cd = new Set(); // creating the set for command cooldowns
 const cmdFiles = fs.readdirSync(__dirname + '/cmd').filter(file => file.endsWith('.js')); // reading the command files in async
@@ -135,6 +138,12 @@ bot.once('ready', async () => {
             }
         }
     }, 30000);
+    // set the bot's code type to either release (FutatsuLollies - Verified) or beta (PianoGirl - Unverified)
+    if (token == verifiedToken) {
+        bot.code_type = bot.code_rels;
+    } else {
+        bot.code_type = bot.code_beta;
+    }
 });
 // error logging
 bot.errHandle = errMain => {
